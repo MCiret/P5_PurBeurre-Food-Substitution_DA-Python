@@ -1,4 +1,7 @@
-DATA_CATEGORIES_LIST = [
+### Open Food Facts (OFF) data ###
+
+# Categories used in the GET queries to request OFF data using API search
+GET_QUERY_CATEGORIES_LIST = [
     {"0": "desserts", "1": "biscuits"},
     {"0": "desserts", "1": "fromages"},
     {"0": "petit-dejeuners"},
@@ -10,6 +13,8 @@ DATA_CATEGORIES_LIST = [
 
 GET_QUERY_HEADER = {'user-agent': 'P5_DAPython - Linux - v0 - no_url'}
 
+# Fields filters used in the GET queries (request OFF data using API search)
+# for recovering only datas then used in the database
 # {json field: database field (table.field)}
 JSON_DATABASE_FIELDS_DICT = {
     "_id": "food.barcode",
@@ -20,8 +25,8 @@ JSON_DATABASE_FIELDS_DICT = {
     "categories_tags": "category.name"
 }
 
-# Categories_tags field (json data) are often in english
-# but this application database should be in french
+# The field "Categories_tags" values (in json data) are often in english
+# whereas the database and the application have to be in french
 CATEGORIES_TAGS_FR_TRANSLATION = {
     "en:desserts": "desserts",
     "en:biscuits": "biscuits",
@@ -37,4 +42,14 @@ CATEGORIES_TAGS_FR_TRANSLATION = {
     "en:breads": "pains",
     "en:frozen-foods": "surgelés",
     "en:dairies": "produits laitiers"
+}
+
+### Open Food Facts (OFF) data ###
+
+DB_CONFIG = {
+    'user': 'root',
+    'password': 'boutaz',
+    'host': '127.0.0.1',
+    'database': 'pur_beurre_off_db',
+     'raise_on_warnings': True  # warnings should raise exceptions
 }
