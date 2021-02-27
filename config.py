@@ -41,15 +41,16 @@ CATEGORIES_TAGS_FR_TRANSLATION = {
     "en:pizzas": "pizzas",
     "en:breads": "pains",
     "en:frozen-foods": "surgelés",
-    "en:dairies": "produits laitiers"
+    "en:dairies": "produits laitiers",
+    "fr:pates-a-tartiner": "pates-a-tartiner"  # category kept for db but already in french
 }
 
-### Open Food Facts (OFF) data ###
 
-DB_CONFIG = {
+# Open Food Facts (OFF) data #
+DB_PARAM = {
     'user': 'root',
     'password': 'boutaz',
     'host': '127.0.0.1',
-    'database': 'pur_beurre_off_db',
+    'database': 'pur_beurre_db',
      'raise_on_warnings': True  # warnings should raise exceptions
 }
