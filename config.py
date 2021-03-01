@@ -13,17 +13,16 @@ GET_QUERY_CATEGORIES_LIST = [
 
 GET_QUERY_HEADER = {'user-agent': 'P5_DAPython - Linux - v0 - no_url'}
 
+NB_PROD = 50  # how many products to retrieve with one API search request
+
 # Fields filters used in the GET queries (request OFF data using API search)
 # for recovering only datas then used in the database
 # {json field: database field (table.field)}
-JSON_DATABASE_FIELDS_DICT = {
-    "_id": "food.barcode",
-    "product_name": "food.product",
-    "nutriscore_grade": "food.nutri_score",
-    "url": "food.url_openfoodfacts",
-    "stores_tags": "store.name",
-    "categories_tags": "category.name"
-}
+QUERY_FIELDS_LIST = [
+    "_id", "product_name", "product_quantity",
+    "nutriscore_grade", "url",
+    "stores_tags", "categories_tags", "compared_to_category"
+]
 
 # The field "Categories_tags" values (in json data) are often in english
 # whereas the database and the application have to be in french

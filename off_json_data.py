@@ -15,9 +15,9 @@ def get_json_data_from_off_api() -> 'list of GET queries responses (dict)':
                          f"&tag_contains_{key}=contains" \
                          f"&tag_{key}={categories_dict[key]}"
         query_str += "&fields="
-        for field in cfg.JSON_DATABASE_FIELDS_DICT:
+        for field in cfg.QUERY_FIELDS_LIST:
             query_str += f"{field},"
-        query_str += "&page_size=50&json=true"
+        query_str += f"&page_size={cfg.NB_PROD}&json=true"
         get_queries_list.append(query_str)
 
     get_responses_json_list = []
@@ -55,8 +55,8 @@ def sort_and_write_outfile_json_data(json_data_list: list):
 
 def make_list_of_all_valid_products(off_api_json_responses: list) -> list:
     """ Each response is a dict, where the "products" key is a list of
-    products, where each product is a 6 keys (i.e fields) dict.
-    A valid product = has the 5 required fields ("stores_tags" is optional).
+    food products, where each product is a 8 keys/fields dict.
+    A valid product = has the 5 required fields (quantity and stores_tags are optional).
     => This function just appends each valid product dict in a list.
     """
     return [prod for resp_dict in off_api_json_responses
@@ -66,15 +66,13 @@ def make_list_of_all_valid_products(off_api_json_responses: list) -> list:
             and "nutriscore_grade" in prod.keys()
             and "url" in prod.keys()
             and "categories_tags" in prod.keys()
+            and "compared_to_category" in prod.keys()
             ]
 
 
 def select_and_translate_products_categories(json_products: list):
     """:param json_products is modified by side effect"""
-    prod_num = 0
     for prod_dict in json_products:
-        prod_num += 1
-        print(f"prod N°{prod_num}")
         tmp_categories_list = []
         for category in prod_dict["categories_tags"]:
             if category in cfg.CATEGORIES_TAGS_FR_TRANSLATION.keys():
