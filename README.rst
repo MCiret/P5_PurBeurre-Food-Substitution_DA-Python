@@ -17,7 +17,7 @@ TABLE OF CONTENTS
 DESCRIPTION
 ===========
 This program asks the user for choosing a food product in the database and searches for an healthy alternative.
-It proposes to select a category then a food product.
+It proposes selecting a category then a food product.
 
 Data comes from Open Food Facts (OFF) french database. The program requests the OFF search API
 then inserts the retrieved json data in a local database.
@@ -26,27 +26,45 @@ The program allows the user to back up his favorite food substitution in the dat
 
 Features
 ------------
+
 I. A user would like to choose a food product in order to obtain an healthy substitution.
-    I.1 Retrieve OFF data using API requests (off_json_data.py : get_json_data_from_off_api()) with the "fields" keyword
-    for filtering which informations are interesting in the responses (json format).
 
-    --> One product in json data file : fig1_
+    I.1 Load data :
+        I.1.1 Retrieve OFF data using search API requests (get_off_api_data() in /Data_loading/retrieve_off_api_data.py) with the "fields" keyword
+        to get only needed infos in the responses (see the picture 1_food_product.json_).
 
-    I.2 Parse the responses stored in a json object to have all food products in one list and to delete those which do not have all the required fields
+        I.1.2 Parse the responses stored in a json object to build one list with all valid food products (have all the required fields) (build_list_of_all_valid_products() in /Data_loading/retrieve_off_api_data.py).
+
+        I.1.3 Translate categories (often in english) and keep only some chosen categories to fill the table in database (select_and_translate_products_categories() in /Data_loading/retrieve_off_api_data.py).
+
+        I.1.4 Fill the database (db_insert_all_products() in /Data_loading/fill_pur_beurre_db.py) with the list obtained step I.3.
+
+    I.2 User Interface : Propose searching for a food product substitute (see I.2) OR displaying recorded favorites (see III).
+        I.2.1 Display numbered food products categories and ask user for choosing one. Then display numbered food products
+        (belonging to the chosen category) and propose choosing one or going back to the categories choice.
+
+        I.2.2 Compare the chosen food products to those having the same category(ies) to find a substitution (i.e with nutriscore <).
+
+        I.2.3 Display the result : infos about the food product to be substituted --> infos about the substitute.
+
 II. A user would like to back up a food product substitution in order to keep it in memory as a favorite.
+
+        * When a substitution result is display (see I.2.3), propose recording it in the database.
+
 III. A user would like to get back his food product substitution favorites in order to read informations without repeating the research.
+
+        * III.1 Display recorded substitution results (infos about the food product to be substituted --> infos about the substitute).
 
 INSTALLATION
 ============
-1) Install MySQL SGDB + Modify connection parameters in config.py (DB_PARAM dict).
-2) Create the database executing the pur_beurre_db_creation.sql.
-3) Run the main.py
+1) Install MySQL SGDB + Modify DB_PARAM dict (in config.py) to replace it with your database connection parameters.
+2) Create the database : execute /Data_loading/pur_beurre_db_creation.sql.
+3) Run : main.py [-h] ld
 
 Requirements
 ------------
 |vPython badge| |vMySQL badge|
 
-MySQL version : 5.7
 Python librairies (see requirements.txt):
 
 * certifi==2020.12.5
@@ -62,8 +80,33 @@ Python librairies (see requirements.txt):
 USAGE
 =====
 
-.. _fig1:
+.. _1_food_product.json:
 .. image:: ./images/1product_OFF_search_API_response.png
+
+------------------------------------------------------------------------------------------------------------------------
+
+**Each field in json format corresponds to one in the local database (see local_db_schema_ below):**
+
+Table food :
+
+* "_id" = barcode
+* "product_name" = name
+* "nutriscore_grade" = nutri_score
+* "url" = url
+* "product_quantity" (optional) : quantity
+* "compared_to_categroy" = compared_to_category --> the unique keyword used to find a relevant substitute.
+
+Table category : 1 element in the "categories_tags" = name
+
+Table store : 1 element in the "stores_tags" (optional) = name
+
+------------------------------------------------------------------------------------------------------------------------
+
+**Pur Beurre Food substitution application local database :**
+
+
+.. _local_db_schema:
+.. image:: ./images/local_db_schema.png
 
 ROADMAP
 =======

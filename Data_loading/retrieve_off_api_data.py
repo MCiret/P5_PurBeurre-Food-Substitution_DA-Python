@@ -3,7 +3,7 @@ import json
 import requests
 
 
-def get_json_data_from_off_api() -> 'list of GET queries responses (dict)':
+def get_off_api_data() -> 'list of json responses (dict)':
 
     # Build the GET queries with categories criterion (see config.py)
     # and fields filters (see config.py) which are useful to fill de database.
@@ -53,10 +53,10 @@ def sort_and_write_outfile_json_data(json_data_list: list):
                       indent=4, sort_keys=True, ensure_ascii=False)
 
 
-def make_list_of_all_valid_products(off_api_json_responses: list) -> list:
+def build_list_of_all_valid_products(off_api_json_responses: list) -> list:
     """ Each response is a dict, where the "products" key is a list of
     food products, where each product is a 8 keys/fields dict.
-    A valid product = has the 5 required fields (quantity and stores_tags are optional).
+    A valid product = has the 6 required fields (quantity and stores_tags are optional).
     => This function just appends each valid product dict in a list.
     """
     return [prod for resp_dict in off_api_json_responses
