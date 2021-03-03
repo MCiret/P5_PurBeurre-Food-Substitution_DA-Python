@@ -1,7 +1,7 @@
 ### Open Food Facts (OFF) data ###
 
 # Categories used in the GET queries to request OFF data using API search
-GET_QUERY_CATEGORIES_LIST = [
+GET_QUERY_LIST_CATEGORIES_DICT = [
     {"0": "desserts", "1": "biscuits"},
     {"0": "desserts", "1": "fromages"},
     {"0": "petit-dejeuners"},

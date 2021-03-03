@@ -9,41 +9,48 @@ TABLE OF CONTENTS
 
 1. `DESCRIPTION`_
 2. `INSTALLATION`_
+
+    * `Requirements`_
+
 3. `USAGE`_
-4. `ROADMAP`_
-5. `LICENSE`_
-6. `PROJECT STATUS`_
+
+    * `json data`_
+    * `Database`_
+    * `OFF Search API query`_
+
+        1) Default usage
+        2) Personalized usage
 
 DESCRIPTION
 ===========
-This program asks the user for choosing a food product in the database and searches for an healthy alternative.
-It proposes selecting a category then a food product.
+This program asks user for choosing a food product in a local database and searches for an healthy alternative.
+The user could back up each result in the local database to read it later.
 
-Data comes from Open Food Facts (OFF) french database. The program requests the OFF search API
-then inserts the retrieved json data in a local database.
-
-The program allows the user to back up his favorite food substitution in the database to read it later.
+Data comes from Open Food Facts (OFF) french database (requested via the OFF search API). The retrieved json
+data are parsed, reorganized and inserted in the local database.
 
 Features
-------------
-
+--------
 I. A user would like to choose a food product in order to obtain an healthy substitution.
 
     I.1 Load data :
-        I.1.1 Retrieve OFF data using search API requests (get_off_api_data() in /Data_loading/retrieve_off_api_data.py) with the "fields" keyword
-        to get only needed infos in the responses (see the picture 1_food_product.json_).
+        I.1.1 Requests the OFF search API (see response.json_).
 
-        I.1.2 Parse the responses stored in a json object to build one list with all valid food products (have all the required fields) (build_list_of_all_valid_products() in /Data_loading/retrieve_off_api_data.py).
+        I.1.2 Parsed and reorganized json responses (see valid_product.json_):
 
-        I.1.3 Translate categories (often in english) and keep only some chosen categories to fill the table in database (select_and_translate_products_categories() in /Data_loading/retrieve_off_api_data.py).
+            * Make one list with all valid products.
+            * Selects and translates categories (often in english in OFF search API responses).
 
-        I.1.4 Fill the database (db_insert_all_products() in /Data_loading/fill_pur_beurre_db.py) with the list obtained step I.3.
+        I.1.3 Inserts in the database.
 
-    I.2 User Interface : Propose searching for a food product substitute (see I.2) OR displaying recorded favorites (see III).
-        I.2.1 Display numbered food products categories and ask user for choosing one. Then display numbered food products
-        (belonging to the chosen category) and propose choosing one or going back to the categories choice.
+    I.2 User Interface :
 
-        I.2.2 Compare the chosen food products to those having the same category(ies) to find a substitution (i.e with nutriscore <).
+        ????? Propose searching for a food product substitute (see I.2) OR displaying recorded favorites (see III).
+        I.2.1 Display numbered food products categories and ask user for choosing one. Then display numbered food
+        products (belonging to the chosen category) and propose choosing one or going back to the categories choice.
+
+        I.2.2 Compare the chosen food products to those having the same category(ies) to find a substitution
+        (i.e with a lower nutriscore).
 
         I.2.3 Display the result : infos about the food product to be substituted --> infos about the substitute.
 
@@ -51,15 +58,17 @@ II. A user would like to back up a food product substitution in order to keep it
 
         * When a substitution result is display (see I.2.3), propose recording it in the database.
 
-III. A user would like to get back his food product substitution favorites in order to read informations without repeating the research.
+III. A user would like to get back his food product substitution favorites in order to read informations without
+repeating the research.
 
-        * III.1 Display recorded substitution results (infos about the food product to be substituted --> infos about the substitute).
+        * Display recorded substitution results (infos about the food product to be substituted --> infos about
+        the substitute).
 
 INSTALLATION
 ============
 1) Install MySQL SGDB + Modify DB_PARAM dict (in config.py) to replace it with your database connection parameters.
-2) Create the database : execute /Data_loading/pur_beurre_db_creation.sql.
-3) Run : main.py [-h] ld
+2) Create the database by executing /Data_loading/pur_beurre_db_creation.sql (local_db_schema_).
+3) Run the main.py - *usage: main.py [-h] [-ld] [-p PAGE]*
 
 Requirements
 ------------
@@ -79,43 +88,80 @@ Python librairies (see requirements.txt):
 
 USAGE
 =====
+json data
+---------
+**OFF search API response - 1 product structure :**
 
-.. _1_food_product.json:
-.. image:: ./images/1product_OFF_search_API_response.png
+.. _response.json:
+.. image:: ./images/OFF_search_API_response_1_product.png
 
-------------------------------------------------------------------------------------------------------------------------
+|
 
-**Each field in json format corresponds to one in the local database (see local_db_schema_ below):**
+**1 Valid product structure :**
 
-Table food :
+(after parsing and reorganization = feature I.1.2)
+
+.. _valid_product.json:
+.. image:: ./images/1_valid_product.png
+
+Database
+--------
+
+**Each json field (see picture above) corresponds to one in the local database:**
+
+see local_db_schema_ below
+
+Table 'food' :
 
 * "_id" = barcode
 * "product_name" = name
 * "nutriscore_grade" = nutri_score
 * "url" = url
-* "product_quantity" (optional) : quantity
-* "compared_to_categroy" = compared_to_category --> the unique keyword used to find a relevant substitute.
+* "product_quantity" : quantity (optional field)
+* "compared_to_categroy" = compared_to_category (unique keyword used to find a relevant substitute).
 
-Table category : 1 element in the "categories_tags" = name
+Table 'category' : element in the "categories_tags" list = name in the table
 
-Table store : 1 element in the "stores_tags" (optional) = name
+Table 'store' : element in the "stores_tags" list = name in the table (optional field)
 
-------------------------------------------------------------------------------------------------------------------------
-
-**Pur Beurre Food substitution application local database :**
-
+**Local database :**
 
 .. _local_db_schema:
 .. image:: ./images/local_db_schema.png
 
-ROADMAP
-=======
+OFF Search API query
+--------------------
 
-LICENSE
-=======
+1) Default usage
+~~~~~~~~~~~~~~~~
+GET query parameters (only those used in this program) :
+    * Country code : to filter the product search by country (after the https:// )
+    * json : True to retrieve json format data file
+    * page_size : products per page (seems to be 24 if not provided).
+    * page : the number of the gotten page (1 if not provided).
+    * field : to filter the product fields in the response
+    * tagtype_X : to filter the product by criteria
+    * tag_contains_X : to include or exclude the associated criterion ('contains' or 'does_not_contain')
+    * tag_X: criterion
 
-PROJECT STATUS
-==============
+Default execution of this app = 7 GET queries to the OFF search API :
+    * Country code = fr
+    * json = True
+    * page_size = 50
+    * page = 1
+    * fields = _id, product_name, nutriscore_grade, url, stores_tags, categories_tags, product_quantity, compared_to_category
+    * tagtype_X = categories
+    * tag_contains_X = contains
+    * tag_X = see GET_QUERY_LIST_CATEGORIES_DICT in config.py
+
+GET query example :
+    * https://fr.openfoodfacts.org/cgi/search.pl?action=process&tagtype_0=categories&tag_contains_0=contains&tag_0=desserts&tagtype_1=categories&tag_contains_1=contains&tag_1=biscuits&fields=_id,product_name,nutriscore_grade,url,stores_tags,categories_tags,compared_to_category,product_quantity,&page_size=50&json=true
+
+2) Personalized usage
+~~~~~~~~~~~~~~~~~~~~~
+2 ways :
+    Modify variables in python scripts (get_off_api_data.py and config.py)
+
 
 .. |vPython badge| image:: https://img.shields.io/badge/python-v3.8-blue.svg
 .. |vMySQL badge| image:: https://img.shields.io/badge/MySQL-v5.7-yellow

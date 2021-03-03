@@ -4,10 +4,7 @@ import control as ct
 
 
 def main():
-    if ct.load_data():
-        print("ALL GOOD :-)")
-    else:
-        exit()
+    ct.load_data()
 
 
 if __name__ == '__main__':
