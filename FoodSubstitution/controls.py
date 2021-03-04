@@ -1,4 +1,4 @@
-import view as v
+import views as v
 import DataLoading.get_off_api_data as dt
 import DataLoading.db_insert as db
 import config as cfg

@@ -1,29 +1,27 @@
 from mysql import connector as db
 
 
-def db_insert_all_products(json_products: list, db_connection_params: dict)\
-        -> dict:
+def db_insert_all_products(json_products: list, db_connector) -> dict:
     """/!/ json_products has to be a list of valid products dicts (i.e
     returned from off_json_data.make_list_of_all_valid_products() function).
     1 product <=> 1 food
     """
-    db_conn = db.connect(**db_connection_params)
-    db_curs = db_conn.cursor()
+    db_curs = db_connector.cursor()
     prod_inserted = 0
     cat_inserted = 0
     store_inserted = 0
     for prod_dict in json_products:
-        prod_inserted += food_db_insert(db_curs, db_conn, prod_dict)
-        cat_inserted += categories_db_insert(db_curs, db_conn, prod_dict["_id"],
+        prod_inserted += food_db_insert(db_curs, db_connector, prod_dict)
+        cat_inserted += categories_db_insert(db_curs, db_connector, prod_dict["_id"],
                              prod_dict["categories_tags"])
         # Reminder : "stores_tags" field is optional
         if "stores_tags" in prod_dict.keys():
-            store_inserted += stores_db_insert(db_curs, db_conn, prod_dict["_id"],
+            store_inserted += stores_db_insert(db_curs, db_connector, prod_dict["_id"],
                              prod_dict["stores_tags"])
         else:
             continue
     db_curs.close()
-    db_conn.close()
+    db_connector.close()
     return {"to_insert": len(json_products), "prod": prod_inserted,
             "cat": cat_inserted, "store": store_inserted}
 
