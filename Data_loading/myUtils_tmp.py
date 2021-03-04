@@ -9,7 +9,7 @@ def sort_write_json_resp_by_category(off_api_json_responses: 'list[dict[dict]]')
     get_out_files_names_list = []
 
     for categories_dict in cfg.GET_QUERY_LIST_CATEGORIES_DICT:
-        out_file_name = "Written json data" \
+        out_file_name = "Data_loading/Written json data" \
                         "/response_get_query_category"
         for key in categories_dict:
             out_file_name += f"_{categories_dict[key]}"

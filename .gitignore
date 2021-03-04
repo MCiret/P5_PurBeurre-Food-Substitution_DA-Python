@@ -1,3 +1,5 @@
 venv/
 .idea/
 __pycache__/
+Data_loading/Written json data/
+Data_loading/myUtils_tmp.py
