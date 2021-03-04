@@ -3,7 +3,7 @@ import json
 import requests
 
 
-def get_off_api_data(page: int) -> "list[dict]":
+def get_off_api_data(page_nb: int) -> "list[dict]":
 
     # Build the GET queries to retrieve json data from OFF search API
     get_queries_list = []
@@ -16,7 +16,8 @@ def get_off_api_data(page: int) -> "list[dict]":
         query_str += "&fields="
         for field in cfg.QUERY_FIELDS_LIST:
             query_str += f"{field},"
-        query_str += f"&page_size={cfg.NB_PROD}&page={page}&json=true"
+        query_str += f"&page_size={cfg.NB_PROD_PER_PAGE}" \
+                     f"&page={page_nb}&json=true"  # page_nb is set when user run the program (-p argument)
         get_queries_list.append(query_str)
 
     responses_json_list = []

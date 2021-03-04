@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import control as ct
+from FoodSubstitution import control as ct
 
 
 def main():

@@ -13,7 +13,7 @@ GET_QUERY_LIST_CATEGORIES_DICT = [
 
 GET_QUERY_HEADER = {'user-agent': 'P5_DAPython - Linux - v0 - no_url'}
 
-NB_PROD = 50  # how many products to retrieve with one API search request
+NB_PROD_PER_PAGE = 50  # number of product per gotten page from OFF search API
 
 # Fields filters used in the GET queries (request OFF data using API search)
 # for recovering only datas then used in the database

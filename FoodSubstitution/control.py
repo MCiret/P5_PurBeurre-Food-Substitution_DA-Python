@@ -1,9 +1,8 @@
 import view as v
-import model as m
-import Data_loading.get_off_api_data as dt
-import Data_loading.db_insert as db
+import DataLoading.get_off_api_data as dt
+import DataLoading.db_insert as db
 import config as cfg
-import myUtils_tmp as mu
+import DataLoading.myUtils_tmp as mu
 
 
 def load_data():

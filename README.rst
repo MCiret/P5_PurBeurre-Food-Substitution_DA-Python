@@ -61,13 +61,12 @@ II. A user would like to back up a food product substitution in order to keep it
 III. A user would like to get back his food product substitution favorites in order to read informations without
 repeating the research.
 
-        * Display recorded substitution results (infos about the food product to be substituted --> infos about
-        the substitute).
+        * Display recorded substitution results (infos about the food product to be substituted and infos about the substitute).
 
 INSTALLATION
 ============
 1) Install MySQL SGDB + Modify DB_PARAM dict (in config.py) to replace it with your database connection parameters.
-2) Create the database by executing /Data_loading/pur_beurre_db_creation.sql (local_db_schema_).
+2) Create the database by executing /Data_loading/pur_beurre_db_creation.sql (see Physical Data Model local_db_PDM_).
 3) Run the main.py - *usage: main.py [-h] [-ld] [-p PAGE]*
 
 Requirements
@@ -93,7 +92,7 @@ json data
 **OFF search API response - 1 product structure :**
 
 .. _response.json:
-.. image:: ./images/OFF_search_API_response_1_product.png
+.. image:: ./ImagesReadme/OFF_search_API_response_1_product.png
 
 |
 
@@ -102,14 +101,14 @@ json data
 (after parsing and reorganization = feature I.1.2)
 
 .. _valid_product.json:
-.. image:: ./images/1_valid_product.png
+.. image:: ./ImagesReadme/1_valid_product.png
 
 Database
 --------
 
 **Each json field (see picture above) corresponds to one in the local database:**
 
-see local_db_schema_ below
+see local_db_PDM_ below
 
 Table 'food' :
 
@@ -117,7 +116,7 @@ Table 'food' :
 * "product_name" = name
 * "nutriscore_grade" = nutri_score
 * "url" = url
-* "product_quantity" : quantity (optional field)
+* "product_quantity" : quantity (optional field, used to specify some food product having same name but different barcode because of different quantity).
 * "compared_to_categroy" = compared_to_category (unique keyword used to find a relevant substitute).
 
 Table 'category' : element in the "categories_tags" list = name in the table
@@ -126,8 +125,8 @@ Table 'store' : element in the "stores_tags" list = name in the table (optional 
 
 **Local database :**
 
-.. _local_db_schema:
-.. image:: ./images/local_db_schema.png
+.. _local_db_PDM:
+.. image:: ./ImagesReadme/local_db_schema.png
 
 OFF Search API query
 --------------------
@@ -160,7 +159,17 @@ GET query example :
 2) Personalized usage
 ~~~~~~~~~~~~~~~~~~~~~
 2 ways :
-    Modify variables in python scripts (get_off_api_data.py and config.py)
+
+    1) Modify variables in python scripts (get_off_api_data.py, config.py and view.py) to get differents data from OFF search API.
+
+        *For example : modify categories names in config.py or the gotten page number default value in get_args() in view.py.*
+
+
+    2) Use the -p argument when running the program (see --help)
+
+**WARNING :** do not modify the GET query fields parameters because they corresponds to the database fields
+
+Note that IntegrityError (i.e duplicate primary key or value in UNIQUE constrained field) are handled during database insertions to enable "feeding" the local database with more products...
 
 
 .. |vPython badge| image:: https://img.shields.io/badge/python-v3.8-blue.svg
