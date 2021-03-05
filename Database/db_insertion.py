@@ -1,6 +1,3 @@
-from mysql import connector as db
-
-
 def db_insert_all_products(json_products: list, db_connector) -> dict:
     """/!/ json_products has to be a list of valid products dicts (i.e
     returned from off_json_data.make_list_of_all_valid_products() function).

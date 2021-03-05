@@ -2,20 +2,21 @@
 Look OC Webinaire (T. Chappuis) "BD - AOO - Orga du code"
 """
 
-from db_managers import FoodManager
-from db_managers import CategoryManager
-from db_managers import StoreManager
-import DataLoading.database_connection as db
+from Database.db_managers import FoodManager
+from Database.db_managers import CategoryManager
+from Database.db_managers import StoreManager
+import Database.db_connection as dbc
 
 
 class Food:
+    """Initialize a food object but isn't in charge of database inserting"""
 
-    objects = FoodManager(db)  # Django style
+    objects = FoodManager(dbc)  # Django style
 
     def __init__(self, name, nutri_score, url_openfoodfacts,
                  quantity, compared_to_category, categories, stores):
         # id (PK in db) is not in init parameters because we don't want
-        # to initialise it "by hand"
+        # to initialise it "by hand" => it has to be handle by managers..
         self.id = None  # here it is the barcode field ;
         # attribute not involved in tables relations
         self.name = name
@@ -30,27 +31,27 @@ class Food:
 
 class Category:
 
-    objects = CategoryManager(db)  # Django style
+    objects = CategoryManager(dbc)  # Django style
 
     def __init__(self, name, foods_category):
         # id (PK in db) is not in init parameters because we don't want
-        # to initialise it "by hand"
+        # to initialise it "by hand" => it has to be handle by managers..
         self.id = None
         # attribute not involved in tables relations
         self.name = name
         # attribute involved in/representing tables relations
-        self.foods_category = foods_category
+        self.foods_category = foods_category  # list
 
 
 class Store:
 
-    objects = StoreManager(db)  # Django style
+    objects = StoreManager(dbc)  # Django style
 
     def __init__(self, name, foods_store):
         # id (PK in db) is not in init parameters because we don't want
-        # to initialise it "by hand"
+        # to initialise it "by hand" => it has to be handle by managers..
         self.id = None
         # attribute not involved in tables relations
         self.name = name
         # attribute involved in/representing tables relations
-        self.foods_store = foods_store
+        self.foods_store = foods_store  # list

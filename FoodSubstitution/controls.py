@@ -1,8 +1,8 @@
 import views as v
-import DataLoading.get_off_api_data as dt
-import DataLoading.db_insert as db
-import config as cfg
-import DataLoading.myUtils_tmp as mu
+import Data.get_off_api_data as dt
+from Database import db_insertion as dbi
+from Database import db_connection as dbc
+import Data.myUtils_tmp as mu
 
 
 def load_data():
@@ -26,7 +26,7 @@ def load_data():
         mu.write_valid_products(curr_valid_products_list)
 
         v.display_data_loading_step(4)
-        insert_results_counts_dict = db.db_insert_all_products(curr_valid_products_list, cfg.DB_PARAM)
+        insert_results_counts_dict = dbi.db_insert_all_products(curr_valid_products_list, dbc)
         v.display_done_msg()
 
         v.display_db_insertions_counts(insert_results_counts_dict)
