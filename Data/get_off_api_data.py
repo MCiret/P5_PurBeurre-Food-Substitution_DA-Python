@@ -33,8 +33,8 @@ def get_off_api_data(page_nb: int) -> "list[dict]":
 def build_list_of_all_valid_products(off_api_json_responses:
                                      'list[dict[dict]]') -> 'list[dict]':
     """A valid product has to be formed with 6 of the 8 requested fields
-    ("stores_tags" and "quantity_product" are optional).
-    """
+    ("stores_tags" and "quantity_product" are optional)."""
+
     return [prod for resp_dict in off_api_json_responses
             for prod in resp_dict["products"]
             if "_id" in prod.keys()

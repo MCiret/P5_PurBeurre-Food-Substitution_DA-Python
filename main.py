@@ -5,7 +5,7 @@ import FoodSubstitution.controls as ct
 
 
 def main():
-    ct.load_data()
+    ct.initialize_data()
 
 
 if __name__ == '__main__':

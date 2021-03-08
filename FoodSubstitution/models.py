@@ -6,52 +6,53 @@ from Database.db_managers import FoodManager
 from Database.db_managers import CategoryManager
 from Database.db_managers import StoreManager
 import Database.db_connection as dbc
+from dataclasses import dataclass, field  # https://realpython.com/python-data-classes/#more-flexible-data-classes
+from typing import List
 
 
+@dataclass
 class Food:
     """Initialize a food object but isn't in charge of database inserting"""
 
-    objects = FoodManager(dbc)  # Django style
+    objects = FoodManager(dbc.db_active_connection)  # Django style
 
-    def __init__(self, name, nutri_score, url_openfoodfacts,
-                 quantity, compared_to_category, categories, stores):
-        # id (PK in db) is not in init parameters because we don't want
-        # to initialise it "by hand" => it has to be handle by managers..
-        self.id = None  # here it is the barcode field ;
-        # attribute not involved in tables relations
-        self.name = name
-        self.nutriScore = nutri_score
-        self.urlOpenFoodFacts = url_openfoodfacts
-        self.quantity = quantity
-        self.comparedToCategory = compared_to_category
-        # attribute involved in/representing tables relations
-        self.categories = categories  # list
-        self.stores = stores  # list
+    # attribute not involved in tables relations
+    name: str
+    nutri_score: str
+    url_openfoodfacts : str
+    quantity: str
+    compared_to_category: str
+    # attribute involved in/representing tables relations
+    # categories: 'List[Category]'
+    # stores: 'List[Store]'
+
+    # id (PK in db) is not in init parameters because we don't want
+    # to initialise it "by hand" => it has to be handle by managers..
+    id: int = field(init=False, default=None)  # here it is the barcode field ;
 
 
+@dataclass
 class Category:
 
-    objects = CategoryManager(dbc)  # Django style
+    objects = CategoryManager(dbc.db_active_connection)  # Django style
 
-    def __init__(self, name, foods_category):
-        # id (PK in db) is not in init parameters because we don't want
-        # to initialise it "by hand" => it has to be handle by managers..
-        self.id = None
-        # attribute not involved in tables relations
-        self.name = name
-        # attribute involved in/representing tables relations
-        self.foods_category = foods_category  # list
+    name: str  # attribute not involved in tables relations
+    food_category: List[Food]  # attribute involved in/representing tables relations
+
+    # id (PK in db) is not in init parameters because we don't want
+    # to initialise it "by hand" => it has to be handle by managers..
+    id: int = field(init=False, default=None)
 
 
+@dataclass
 class Store:
 
-    objects = StoreManager(dbc)  # Django style
+    objects = StoreManager(dbc.db_active_connection)  # Django style
 
-    def __init__(self, name, foods_store):
-        # id (PK in db) is not in init parameters because we don't want
-        # to initialise it "by hand" => it has to be handle by managers..
-        self.id = None
-        # attribute not involved in tables relations
-        self.name = name
-        # attribute involved in/representing tables relations
-        self.foods_store = foods_store  # list
+    name: str  # attribute not involved in tables relations
+    food_store: List[Food]  # attribute involved in/representing tables relations
+
+    # id (PK in db) is not in init parameters because we don't want
+    # to initialise it "by hand" => it has to be handle by managers..
+    id: int = field(init=False, default=None)
+

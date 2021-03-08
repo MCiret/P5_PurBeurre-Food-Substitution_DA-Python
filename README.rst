@@ -14,7 +14,7 @@ TABLE OF CONTENTS
 
 3. `USAGE`_
 
-    * `json data`_
+    * `json data examples`_
     * `Database`_
     * `OFF Search API query`_
 
@@ -36,9 +36,9 @@ I. A user would like to choose a food product in order to obtain an healthy subs
     I.1 Load data :
         I.1.1 Requests the OFF search API (see response.json_).
 
-        I.1.2 Parsed and reorganized json responses (see valid_product.json_):
+        I.1.2 Reorganized json responses (see valid_product.json_):
 
-            * Make one list with all valid products.
+            * Keeps only products dict and makes one big list with all of them valid (= has the required fields).
             * Selects and translates categories (often in english in OFF search API responses).
 
         I.1.3 Inserts in the database.
@@ -87,18 +87,18 @@ Python librairies (see requirements.txt):
 
 USAGE
 =====
-json data
----------
-**OFF search API response - 1 product structure :**
+json data examples
+------------------
+**OFF search API response structure :**
 
 .. _response.json:
 .. image:: ./ImagesReadme/OFF_search_API_response_1_product.png
 
 |
 
-**1 Valid product structure :**
+**Final list of valid products dict structure :**
 
-(after parsing and reorganization = feature I.1.2)
+(after reorganization, see feature I.1.2)
 
 .. _valid_product.json:
 .. image:: ./ImagesReadme/1_valid_product.png
@@ -167,9 +167,9 @@ GET query example :
 
     2) Use the -p argument when running the program (see --help)
 
-**WARNING :** do not modify the GET query fields parameters because they corresponds to the database fields
+**WARNING :** do not modify the GET query fields parameters because they corresponds to the database fields.
 
-Note that IntegrityError (i.e duplicate primary key or value in UNIQUE constrained field) are handled during database insertions to enable "feeding" the local database with more products...
+**Note that** IntegrityError (i.e duplicate primary key or value in UNIQUE constrained field) are handled during database insertions to enable "feeding" the local database with more products without crashing...
 
 
 .. |vPython badge| image:: https://img.shields.io/badge/python-v3.8-blue.svg

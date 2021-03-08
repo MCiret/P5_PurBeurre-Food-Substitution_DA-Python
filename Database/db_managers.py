@@ -3,6 +3,7 @@
 Look OC Webinaire (T. Chappuis) "BD - AOO - Orga du code"
 """
 
+import FoodSubstitution.models as m
 
 class FoodManager:
     def __init__(self, db):
@@ -13,7 +14,20 @@ class FoodManager:
         # actually, for each food we would like to retrieve associated
         # categories and potential stores
         # to build all the structure of a Movie() object
-        pass
+        curs = self.db.cursor()
+        curs.execute("SELECT * FROM food")
+        # for row in curs.fetchall():
+            # print(row)
+        food_list = []
+        for row in curs.fetchall():
+            fd = m.Food(*row[1:])
+            fd.id = row[0]
+            food_list.append(fd)
+
+        for food in food_list:
+            print(type(food))
+
+        print(len(food_list))
 
     def get_all_by_category(self, category):  # for example
         pass
