@@ -23,8 +23,8 @@ class Food:
     quantity: str
     compared_to_category: str
     # attribute involved in/representing tables relations
-    # categories: 'List[Category]'
-    # stores: 'List[Store]'
+    categories: 'List[Category]'
+    stores: 'List[Store]'
 
     # id (PK in db) is not in init parameters because we don't want
     # to initialise it "by hand" => it has to be handle by managers..

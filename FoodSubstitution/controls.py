@@ -39,4 +39,3 @@ def initialize_data():
         v.display_no_data_loading()
         m.Food.objects.get_all()
 
-
