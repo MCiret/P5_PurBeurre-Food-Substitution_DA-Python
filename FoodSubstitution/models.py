@@ -16,19 +16,20 @@ class Food:
 
     objects = FoodManager(dbc.db_active_connection)  # Django style
 
-    # attribute not involved in tables relations
-    name: str
-    nutri_score: str
-    url_openfoodfacts : str
-    quantity: str
-    compared_to_category: str
-    # attribute involved in/representing tables relations
-    categories: 'List[Category]'
-    stores: 'List[Store]'
-
+    
     # id (PK in db) is not in init parameters because we don't want
     # to initialise it "by hand" => it has to be handle by managers..
     id: int = field(init=False, default=None)  # here it is the barcode field ;
+    
+    # attribute not involved in tables relations
+    name: str = field(default=None)
+    nutri_score: str = field(default=None) 
+    url_openfoodfacts : str = field(default=None)
+    quantity: str = field(default=None)
+    compared_to_category: str = field(default=None)
+    # attribute involved in/representing tables relations
+    categories: 'List[Category]' = field(default=None)
+    stores: 'List[Store]' = field(default=None)
 
 
 @dataclass
@@ -36,12 +37,11 @@ class Category:
 
     objects = CategoryManager(dbc.db_active_connection)  # Django style
 
-    name: str  # attribute not involved in tables relations
-    food_category: List[Food]  # attribute involved in/representing tables relations
-
     # id (PK in db) is not in init parameters because we don't want
     # to initialise it "by hand" => it has to be handle by managers..
     id: int = field(init=False, default=None)
+    name: str = field(default=None)  # attribute not involved in tables relations
+    food_category: List[Food] = field(default=None)  # attribute involved in/representing tables relations
 
 
 @dataclass
@@ -49,10 +49,9 @@ class Store:
 
     objects = StoreManager(dbc.db_active_connection)  # Django style
 
-    name: str  # attribute not involved in tables relations
-    food_store: List[Food]  # attribute involved in/representing tables relations
-
     # id (PK in db) is not in init parameters because we don't want
     # to initialise it "by hand" => it has to be handle by managers..
     id: int = field(init=False, default=None)
+    name: str = field(default=None)  # attribute not involved in tables relations
+    food_store: List[Food] = field(default=None)  # attribute involved in/representing tables relations
 

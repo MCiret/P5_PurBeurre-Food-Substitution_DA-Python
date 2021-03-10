@@ -10,21 +10,20 @@ class FoodManager:
         self.db = db
 
     def get_all(self):
-        # rows = db.curs.execute("SELECT * FROM food")
-        # actually, for each food we would like to retrieve associated
-        # categories and potential stores
-        # to build all the structure of a Movie() object
-        curs = self.db.cursor()
-        curs.execute("SELECT barcode, name, nutri_score, url_openfoodfacts, "
+        """To get and instance all foods in DB (categories and stores joins included)
+        """
+        food_curs = self.db.cursor()
+        food_curs.execute("SELECT barcode, name, nutri_score, url_openfoodfacts, "
                      "quantity, compared_to_category "
-                     "FROM food")
+                     "FROM food LIMIT 60")
         food_list = []
-        for food_row in curs.fetchall():
-            fd_id = food_row[0]
+        nb_food = 0
+        for food_res in food_curs.fetchall():
+            nb_food += 1
+            print(nb_food)
+            fd_id = food_res[0]
             fd_categories = []
-            fd_stores = []
             cat_curs = self.db.cursor()
-            store_curs = self.db.cursor()
             cat_curs.execute("SELECT c.name "
                             "FROM category as c "
                             "JOIN food_category as fc "
@@ -32,9 +31,10 @@ class FoodManager:
                             "JOIN food as f "
                             "ON (f.barcode = fc.food_barcode) "
                             "WHERE f.barcode = (%s)", (fd_id,))
-            for cat_row in cat_curs.fetchall():
-                fd_categories.append(cat_row)
-                print(f"Food {fd_id} --> in category {cat_row} ")
+            for cat_res in cat_curs:
+                fd_categories.append(cat_res[0])
+
+            store_curs = self.db.cursor()
             store_curs.execute("SELECT s.name "
                             "FROM store as s "
                             "JOIN food_store as fs "
@@ -42,16 +42,19 @@ class FoodManager:
                             "JOIN food as f "
                             "ON (f.barcode = fs.food_barcode) "
                             "WHERE f.barcode = (%s)", (fd_id,))
-            for store_row in store_curs.fetchall():
-               fd_stores.append(store_row)
-               print(f"Food {fd_id} --> in store {store_row}")
-            
-            fd = m.Food(*food_row[1:], fd_categories, fd_stores)
+            store_res = store_curs.fetchall()  # NB: fetchall() returns [] if query results set is empty ; fetchone() returns None in same case
+            if len(store_res) != 0:
+                fd_stores = []
+                for store in store_res:
+                    fd_stores.append(store)
+                fd = m.Food(*food_res[1:], fd_categories, fd_stores)
+            else:
+                fd = m.Food(*food_res[1:], fd_categories)
+
             fd.id = fd_id
             food_list.append(fd)
-            print("1 food OK : ", fd)
+        return food_list
 
-        print(len(food_list))
 
     def get_all_by_category(self, category):  # for example
         pass

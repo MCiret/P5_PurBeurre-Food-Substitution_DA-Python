@@ -1,4 +1,4 @@
-====================
+===================
 "Pur Beurre" project
 ====================
 **Searching for food substitution in Open Food Facts french database**
@@ -162,7 +162,7 @@ GET query example :
 
     1) Modify variables in python scripts (get_off_api_data.py, config.py and view.py) to get differents data from OFF search API.
 
-        *For example : modify categories names in config.py or the gotten page number default value in get_args() in view.py.*
+        *For example : modify categories names in config.py or the gotten page number default value in get_run_args() in view.py.*
 
 
     2) Use the -p argument when running the program (see --help)

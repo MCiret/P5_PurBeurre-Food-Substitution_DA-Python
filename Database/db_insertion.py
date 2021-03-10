@@ -45,7 +45,6 @@ def food_db_insert(db_connector, db_connect, db_cursor, food_dict: dict):
     try:
         db_cursor.execute(food_insert, food_val)
     except db_connector.IntegrityError as err:
-        print(f"\n1 {err} happens with barcode {food_dict['_id']}")
         db_connect.rollback()
         return 0
     else:

@@ -10,32 +10,45 @@ def initialize_data():
     """OFF search API data are : get, reorganized and inserted into the
     local database (for the moment, db is created by executing
     pur_beurre_db_creation.sql out of this python program)"""
-    args = v.get_args()
+    run_view = v.RunView()
+    args = run_view.get_run_args()
     if args.load_data:
-        v.display_data_loading_step(1)
-        curr_responses_list = dt.get_off_api_data(args.page)
-        v.display_done_msg()
+        run_view.data_initialization_step(1)
+        if args.page != run_view.page_arg_def_val:
+            curr_responses_list = dt.get_off_api_data(args.page)
+        else:
+            curr_responses_list = dt.get_off_api_data(run_view.page_arg_def_val)
+        run_view.step_done()
 
         mu.sort_write_json_resp_by_category(curr_responses_list)
 
-        v.display_data_loading_step(2)
+        run_view.data_initialization_step(2)
         curr_valid_products_list = dt.build_list_of_all_valid_products(
             curr_responses_list)
-        v.display_done_msg()
+        run_view.step_done()
 
-        v.display_data_loading_step(3)
+        run_view.data_initialization_step(3)
         dt.select_and_translate_products_categories(curr_valid_products_list)
-        v.display_done_msg()
+        run_view.step_done()
 
         mu.write_valid_products(curr_valid_products_list)
 
-        v.display_data_loading_step(4)
+        run_view.data_initialization_step(4)
         insert_results_counts_dict = dbi.db_insert_all_products(curr_valid_products_list, dbc.db_connector, dbc.db_active_connection)
-        v.display_done_msg()
+        run_view.step_done()
 
-        v.display_db_insertions_counts(insert_results_counts_dict)
-
+        run_view.data_loading_results(insert_results_counts_dict)
     else:
-        v.display_no_data_loading()
-        m.Food.objects.get_all()
+        run_view.no_data_initialization()
+        # m.Food.objects.get_all()
+        curr_foods_list = m.Food.objects.get_all()
+        print(f"Foods instances in the list = {len(curr_foods_list)}")
+        for food in curr_foods_list:
+            print(food.id, food.name, food.nutri_score, food.url_openfoodfacts,
+                  food.quantity, food.compared_to_category)
+            print(f"--> in categories {food.categories}")
+            print(f"--> in stores {food.stores}")
+
+
+
 
