@@ -67,7 +67,7 @@ INSTALLATION
 ============
 1) Install MySQL SGDB + Modify DB_PARAM dict (in config.py) to replace it with your database connection parameters.
 2) Create the database by executing /Data_loading/pur_beurre_db_creation.sql (see Physical Data Model local_db_PDM_).
-3) Run the main.py - *usage: main.py [-h] [-ld] [-p PAGE]*
+3) Run : python3 -m main *usage: main.py [-h] [-ld] [-p PAGE]*
 
 Requirements
 ------------
@@ -114,10 +114,10 @@ Table 'food' :
 
 * "_id" = barcode
 * "product_name" = name
-* "nutriscore_grade" = nutri_score
+* "nutriscore_grade" = nutriscore
 * "url" = url
-* "product_quantity" : quantity (optional field, used to specify some food product having same name but different barcode because of different quantity).
-* "compared_to_categroy" = compared_to_category (unique keyword used to find a relevant substitute).
+* "quantity" : quantity (optional field, used to specify some food product having same name but different barcode because of different quantity).
+* "compared_to_category" = compared_to_category (unique keyword used to find a relevant substitute).
 
 Table 'category' : element in the "categories_tags" list = name in the table
 
@@ -160,14 +160,14 @@ GET query example :
 ~~~~~~~~~~~~~~~~~~~~~
 2 ways :
 
-    1) Modify variables in python scripts (get_off_api_data.py, config.py and view.py) to get differents data from OFF search API.
+    1) Modify variables directly in scripts.py (see get_off_api_data.py, config.py and view.py) to get differents data from OFF search API.
 
         *For example : modify categories names in config.py or the gotten page number default value in get_run_args() in view.py.*
 
 
     2) Use the -p argument when running the program (see --help)
 
-**WARNING :** do not modify the GET query fields parameters because they corresponds to the database fields.
+**WARNING :** do not modify the GET query 'fields' parameter values because they corresponds to the database fields.
 
 **Note that** IntegrityError (i.e duplicate primary key or value in UNIQUE constrained field) are handled during database insertions to enable "feeding" the local database with more products without crashing...
 

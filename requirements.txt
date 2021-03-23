@@ -1,3 +1,4 @@
+# Installed packages before installing Jupiter Notebook extension in VScode
 certifi==2020.12.5
 chardet==4.0.0
 idna==2.10

@@ -22,21 +22,20 @@ def db_insert_all_products(json_products: list, db_connector, db_connect) -> dic
         else:
             continue
     db_curs.close()
-    db_connect.close()
     return {"to_insert": len(json_products), "prod": prod_inserted,
             "cat": cat_inserted, "store": store_inserted}
 
 
 def food_db_insert(db_connector, db_connect, db_cursor, food_dict: dict):
     food_insert = ("INSERT INTO food"
-                   "(barcode, name, nutri_score, url_openfoodfacts,"
+                   "(barcode, name, nutriscore, url_openfoodfacts,"
                    "quantity, compared_to_category)"
                    "VALUES (%s, %s, %s, %s, %s, %s)")  # using f-string directly in .execute() 1st parameter does not escape the '
     # Reminder : "product_quantity" field is optional
-    if "product_quantity" in food_dict.keys():
+    if "quantity" in food_dict.keys():
         food_val = (food_dict['_id'], food_dict['product_name'],
                     food_dict['nutriscore_grade'], food_dict['url'],
-                    food_dict['product_quantity'],
+                    food_dict['quantity'],
                     food_dict['compared_to_category'])
     else:
         food_val = (food_dict['_id'], food_dict['product_name'],
@@ -44,7 +43,7 @@ def food_db_insert(db_connector, db_connect, db_cursor, food_dict: dict):
                     None, food_dict['compared_to_category'])
     try:
         db_cursor.execute(food_insert, food_val)
-    except db_connector.IntegrityError as err:
+    except db_connector.IntegrityError:
         db_connect.rollback()
         return 0
     else:

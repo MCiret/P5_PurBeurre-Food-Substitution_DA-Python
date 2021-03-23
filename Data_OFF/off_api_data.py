@@ -17,7 +17,7 @@ def get_off_api_data(page_nb: int) -> "list[dict]":
         for field in cfg.QUERY_FIELDS_LIST:
             query_str += f"{field},"
         query_str += f"&page_size={cfg.NB_PROD_PER_PAGE}" \
-                     f"&page={page_nb}&json=true"  # page_nb is set when user run the program (-p argument)
+                     f"&page={page_nb}&json=true"  
         get_queries_list.append(query_str)
 
     responses_json_list = []
@@ -26,8 +26,19 @@ def get_off_api_data(page_nb: int) -> "list[dict]":
         r = requests.get(query, headers=cfg.GET_QUERY_HEADER)
         # Responses (json) are loads in a dict.
         responses_json_list.append(json.loads(r.text))
-
+        
     return responses_json_list
+
+
+def check_off_data_gotten(off_api_json_responses:'list[dict[dict]]') -> 'list[dict]':
+    """A valid product has to be formed with 6 of the 8 requested fields
+    ("stores_tags" and "quantity_product" are optional)."""
+
+    nb_query_resp_ok = 0
+    for resp in off_api_json_responses:
+        nb_query_resp_ok += len(resp["products"])
+
+    return nb_query_resp_ok != 0 
 
 
 def build_list_of_all_valid_products(off_api_json_responses:
