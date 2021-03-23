@@ -1,4 +1,4 @@
-===================
+====================
 "Pur Beurre" project
 ====================
 **Searching for food substitution in Open Food Facts french database**
