@@ -1,6 +1,6 @@
 venv/
 .idea/
 __pycache__/
-Data_OFF/Written json data/
-Data_OFF/myUtils_tmp.py
+dataoff/Written json data/
+dataoff/myUtils_tmp.py
 .vscode/
