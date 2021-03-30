@@ -1,19 +1,18 @@
 import config as cfg
-from .views import DataInitView, MainMenuView, CatView, FoodView, SubstitutionView, BookmarkingView, ReadBookmarksView
+import foodsubstitution.views as vw
 from .models import Food, Category, Store
-from Data_OFF import off_api_data as dt
-from Database import db_insertion as dbi
-from Database import db_connection as dbc
-from Database import db_managers as dbm
-from Data_OFF import myUtils_tmp as mu
+from dataoff import off_api_data as dt
+from database import db_insertion as dbi
+from database import db_connection as dbc
+from dataoff import myUtils_tmp as mu
 
 
 class Controller:
     
     def __init__(self):
-        self.init_view = DataInitView()
+        self.init_view = vw.DataInitView()
         self.args = self.init_view.get_run_args()
-        self.main_view = MainMenuView()
+        self.main_view = vw.MainMenuView()
         self.cat_view:'CatView' = None
         self.food_view:'FoodView' = None
         self.selected_category:'Category' = None
@@ -74,22 +73,44 @@ class Controller:
 
         else:
             self.init_view.no_data_initialization_asked_by_user()
+    
+    def is_user_input_valid(self, input_value: 'str or int', view) -> bool:
+        return (input_value in view.general_valid_input
+                or input_value in view.menu_valid_input)
+
+    def check_user_input(self, input_value: 'str or int', view: 'MainMenuView or subclasses') -> 'str or int':
+        while not self.is_user_input_valid(input_value, view):
+            input_value = view.get_user_choice()
+        return input_value
+
+    def is_user_ask_to_quit(self, input_value: str) -> bool:
+        return input_value in cfg.QUIT_INPUT
+
+    def process_user_input(self, input_value: str, view: 'MainMenuView or subclasses'):
+        print(input_value)
+        if input_value.isdigit():
+            input_value = int(input_value)
+            print("dans if isdigit() ", input_value)
+        checked_input_val = self.check_user_input(input_value, view)
+        if self.is_user_ask_to_quit(checked_input_val):
+            view.quit_msg()
+            exit()
+        else:
+            return checked_input_val
         
     def run_main_menu(self):
         self.main_view.display_specific_menu()
-        user_choice = self.main_view.check_user_input(self.main_view.get_user_choice())
-        if user_choice == '1':
+        user_choice = self.process_user_input(self.main_view.get_user_choice(), self.main_view)
+        if user_choice == 1:
             self.run_cat_choice_menu()
-        elif user_choice == '2':
+        elif user_choice == 2:
             self.run_bookmark_reading()
-        elif user_choice == -1:
-            exit()
 
     def run_cat_choice_menu(self):
         # WHEN user choose main menu n°1 for the 1st time THEN all categories have to been gotten from db :
         if not self.categories:
             self.categories = Category.objects.get_all()
-            self.cat_view = CatView(len(self.categories))
+            self.cat_view = vw.CatView()
         if len(self.categories) == 0:
             self.cat_view.no_data_found_error()
             exit()
@@ -105,14 +126,15 @@ class Controller:
                 self.run_food_choice_menu()
     
     def run_food_choice_menu(self):
-        self.selected_category.foods_category = Food.objects.get_all_by_category(self.selected_category)
+        self.selected_category.foods_category = Food.objects.get_all_by_category(self.selected_category.id)
         if not self.food_view or self.food_view.selected_category_name != self.selected_category.name:  # if it is not a user menu return or if user returned but choose the same category twice in a row
-            self.food_view = FoodView(self.selected_category.name, len(self.selected_category.foods_category))
+            self.food_view = vw.FoodView()
+
         if len(self.selected_category.foods_category) == 0:
             self.food_view.no_data_found_error()
             self.run_cat_choice_menu()
         else:
-            self.food_view.display_specific_menu(self.selected_category.foods_category)
+            self.food_view.display_specific_menu(self.selected_category)
             user_choice = self.food_view.check_user_input(self.food_view.get_user_choice())
             if user_choice in cfg.RETURN_PREV_MENU_INPUT:
                 self.run_cat_choice_menu()
@@ -126,39 +148,30 @@ class Controller:
         # EXCEPT IF if he choose a food twice in a row :
         if not self.substituted_food or self.substituted_food != substituted_food:
             self.substituted_food = substituted_food
-            self.substituted_food.categories_food = Category.objects.get_all_by_food(self.substituted_food)
-            self.substituted_food.stores_food = Store.objects.get_all_by_food(self.substituted_food)
+            self.substituted_food.categories_food = Category.objects.get_all_by_food(self.substituted_food.id)
+            self.substituted_food.stores_food = Store.objects.get_all_by_food(self.substituted_food.id)
             self.substitution_foods = Food.objects.get_all_by_ctc_and_nutriscore_better_than(self.substituted_food)
-            self.sub_view = SubstitutionView()
+            self.sub_view = vw.SubstitutionView()
 
         if len(self.substitution_foods) > 0:
-            self.sub_view.menu_valid_input = tuple(range(1, len(self.substitution_foods)+1))
+            self.sub_view.display_specific_menu(self.substituted_food)
             self.sub_view.substitution_winners(self.substituted_food, self.substitution_foods)
-            self.sub_view.display_specific_menu()
-            print(self.sub_view.general_valid_input)
-            print(self.sub_view.menu_valid_input)
+            self.run_bookmarking(self.substitution_foods)
         else:
-            self.sub_view.menu_valid_input = (None,)
-            similar_foods = Food.objects.get_all_by_ctc(self.substituted_food)
+            similar_foods = Food.objects.get_all_by_compared_to_category(self.substituted_food)
+            self.sub_view.display_specific_menu(self.substituted_food)
             self.sub_view.foods_similar_to_substituted_food(self.substituted_food, similar_foods)
-            print(self.sub_view.general_valid_input)
-            print(self.sub_view.menu_valid_input)
-
-        user_choice = self.sub_view.check_user_input(self.sub_view.get_user_choice())
-        if user_choice in cfg.RETURN_PREV_MENU_INPUT:
-            self.run_food_choice_menu()
-        elif user_choice == -1:
-            exit()
-        else:
-            self.run_bookmarking(self.substitution_foods[int(user_choice) - 1])
+            self.sub_view.display_general_menu()
+            user_choice = self.sub_view.check_user_input(self.sub_view.get_user_choice())
+            if user_choice in cfg.RETURN_PREV_MENU_INPUT:
+                self.run_food_choice_menu()
+            elif user_choice == -1:
+                exit()
         
-    def run_bookmarking(self, substitution_food: 'SubstitutionFood'):
-        self.bookmarking_view = BookmarkingView(self.sub_view.menu_valid_input)
-        new_bookmark_bool = Food.objects.save_bookmark(substitution_food)
-        print(self.bookmarking_view.general_valid_input)
-        print(self.bookmarking_view.menu_valid_input)
-        self.bookmarking_view.bookmarked_substitution(new_bookmark_bool, substitution_food)
-        self.bookmarking_view.display_specific_menu()
+    def run_bookmarking(self, substitution_foods: 'list[SubstitutionFood]'):
+        self.bookmarking_view = vw.BookmarkingView()
+        self.bookmarking_view.display_specific_menu(substitution_foods)
+
         user_choice = self.bookmarking_view.check_user_input(self.bookmarking_view.get_user_choice())
         if user_choice in cfg.RETURN_PREV_MENU_INPUT:
             self.run_food_choice_menu()
@@ -167,21 +180,29 @@ class Controller:
         elif user_choice == -1:
             exit()
         else:
-            self.run_bookmarking(self.substitution_foods[int(user_choice) - 1])
+            bookmarked_substitution_food = substitution_foods[int(user_choice) - 1]
+            new_bookmark_bool = Food.objects.save_bookmark(bookmarked_substitution_food.id, bookmarked_substitution_food.substituted_food.id)
+            self.bookmarking_view.bookmarked_substitution(new_bookmark_bool, bookmarked_substitution_food)
+            self.run_bookmarking(self.substitution_foods)
     
     def run_bookmark_reading(self):
-        bookmarks = Food.objects.get_bookmarks()
-        self.bookmark_reading_view = ReadBookmarksView(len(bookmarks))
-        print(self.bookmark_reading_view.general_valid_input)
-        print(self.bookmark_reading_view.menu_valid_input)
+        bookmarks = Food.objects.get_all_bookmarks_name_id()
+        self.bookmark_reading_view = vw.ReadBookmarksView()
         self.bookmark_reading_view.display_specific_menu(bookmarks)
-        
+
         user_choice = self.bookmark_reading_view.check_user_input(self.bookmark_reading_view.get_user_choice())
-        if user_choice in cfg.RETURN_PREV_MENU_INPUT:
-            self.run_food_choice_menu()
-        elif user_choice in cfg.RETURN_MAIN_MENU_INPUT:
+        print(self.bookmark_reading_view.menu_valid_input)
+        while user_choice in self.bookmark_reading_view.menu_valid_input:
+            substitution_food_to_display = bookmarks[int(user_choice)-1]
+            self.bookmark_reading_view.bookmarked_substitution(new_bk=None,
+                                                               substitution_food=Food.objects.get_one_bookmark_all_infos(substitution_food_to_display.id,
+                                                                                                                         substitution_food_to_display.substituted_food.id))
+            self.bookmark_reading_view.display_general_menu()
+            user_choice = self.bookmark_reading_view.check_user_input(self.bookmark_reading_view.get_user_choice())
+            print("dans while... ", self.bookmark_reading_view.menu_valid_input)
+
+        if user_choice in cfg.RETURN_PREV_MENU_INPUT or user_choice in cfg.RETURN_MAIN_MENU_INPUT:
             self.run_main_menu()
         elif user_choice == -1:
             exit()
-        else:
-            self.run_bookmarking(self.substitution_foods[int(user_choice) - 1])
+            

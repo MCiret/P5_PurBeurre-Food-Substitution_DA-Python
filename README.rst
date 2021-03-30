@@ -67,7 +67,8 @@ INSTALLATION
 ============
 1) Install MySQL SGDB + Modify DB_PARAM dict (in config.py) to replace it with your database connection parameters.
 2) Create the database by executing /Data_loading/pur_beurre_db_creation.sql (see Physical Data Model local_db_PDM_).
-3) Run : python3 -m main *usage: main.py [-h] [-ld] [-p PAGE]*
+3) Run : (UNIX) python3 -m main (DOS) py main.py
+4) Usage: [-h|--help] [-ld|--load_data] [-p|--page PAGE] [-v|--verbose]
 
 Requirements
 ------------

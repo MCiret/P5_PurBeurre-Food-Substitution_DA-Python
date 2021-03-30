@@ -1,7 +1,8 @@
-MAIN_MENU_VALID_INPUT = ('1', '2')
-QUIT_INPUT = ('q', 'Q')
-RETURN_PREV_MENU_INPUT = ('r', 'R')
-RETURN_MAIN_MENU_INPUT = ('M', 'm')
+GENERAL_MENU_VALID_INPUT_DICT = {
+    "quit": {"val": ('q', 'Q'), "txt": "🖮  Q ou q : quitter"},
+    "return": {"val": ('r', 'R'), "txt": "🖮  R ou r : retour au menu précédent"},
+    "main": {"val": ('M', 'm'), "txt": "🖮  M ou m : menu principal"}
+}
 
 # Categories used in the GET queries to request Oopen Food Facts search API
 GET_QUERY_LIST_CATEGORIES_DICT = [
