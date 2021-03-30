@@ -1,4 +1,5 @@
 venv/
+env2/
 .idea/
 __pycache__/
 dataoff/Written json data/
