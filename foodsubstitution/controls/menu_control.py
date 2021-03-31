@@ -1,4 +1,8 @@
 class MenuControl:
+    """ 
+    Base class for all menus controllers.
+    Each menu controller is associated to one menu view.
+    """
 
     def __init__(self, view):
         self.view = view  

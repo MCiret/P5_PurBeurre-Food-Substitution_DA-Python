@@ -1,14 +1,11 @@
-"""Data handling (no database direct access)
-Look OC Webinaire (T. Chappuis) "BD - AOO - Orga du code"
-"""
-
 from .food_model import Food
-from dataclasses import dataclass, field  # https://realpython.com/python-data-classes/#more-flexible-data-classes
-
+from dataclasses import dataclass, field
 
 @dataclass
 class SubstitutionFood(Food):
-    """A Food object with same compared_to_category but better nutriscore than
-    the substituted Food object (which has been selected by user)"""
+    """
+    It is a Food object with an added attribute : the substituted food (i.e selected by user)
+    which have the same compared_to_category but a worse nutriscore
+    """
 
     substituted_food: Food = field(default=None)

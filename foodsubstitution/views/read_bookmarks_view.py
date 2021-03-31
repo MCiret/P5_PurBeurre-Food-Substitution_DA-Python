@@ -1,6 +1,7 @@
 from foodsubstitution.views.bookmarking_view import BookmarkingView
 
 class ReadBookmarksView(BookmarkingView):
+    """ View called by ReadBookmarksControl for terminal displayings """
 
     def __init__(self):
         super().__init__()    

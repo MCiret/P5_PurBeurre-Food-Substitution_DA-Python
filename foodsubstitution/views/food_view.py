@@ -2,7 +2,8 @@ import config as cfg
 from foodsubstitution.views.cat_view import CatView
 
 class FoodView(CatView):
-    
+    """ View called by FoodControl for terminal displayings """
+
     def __init__(self):
         super().__init__()
 
@@ -59,4 +60,3 @@ class FoodView(CatView):
               f"{cfg.PRETTY_PRINT_CATEGORY_DICT[self.selected_category_name].capitalize()}.\n" 
               f"Consultez l'aide (README.rst ou --help) pour alimenter votre base de données locale\n."
               f"Retour au menu précédent...\n")
-

@@ -1,19 +1,20 @@
-"""Database layer access and handling of models instances
-(inserting, selecting, etc...)
-Look OC Webinaire (T. Chappuis) "BD - AOO - Orga du code"
-"""
-
 import foodsubstitution.models as m
 
 class StoreManager:
+    """
+    Access to database to select/insert data from/in Store table.
+    Select queries creates Store objects.
+    """
 
     def __init__(self, db_connection, db_connector):
         self.db_connection = db_connection
         self.db_connector = db_connector
     
     def get_all_by_food(self, food_id: int) -> 'list[Store] (empty if nothing found)':
-        """To get and instance Store objects for one Food.
-        Joined Food not gotten (i.e attribute foods_store is None)."""
+        """
+        To get and instance Store objects for one Food.
+        Joined Food not gotten (i.e attribute foods_store is None).
+        """
         curs = self.db_connection.cursor()
         store_list = []
         curs.execute("SELECT * "
@@ -24,7 +25,7 @@ class StoreManager:
                      "ON (f.barcode = fs.food_barcode) "
                      "WHERE f.barcode = (%s)", (food_id,))
         # a Store could have 0...* Food(s)
-        for store in curs.fetchall():  # NB: fetchall() returns [] if query results set is empty ; fetchone() returns None in same case
+        for store in curs.fetchall():  # fetchall() returns [] if query results set is empty ; fetchone() returns None in same case
             store_obj = m.Store(store[1])
             store_obj.id = store[0]
             store_list.append(store_obj)
@@ -32,7 +33,7 @@ class StoreManager:
         curs.close()
         return store_list
 
-    def insert_stores_food(self, food_barcode: int, food_stores_list: list):
+    def insert_stores_food(self, food_barcode: int, food_stores_list: list) -> 'int (number of stores inserted)':
         curs = self.db_connection.cursor()
         store_insert = "INSERT INTO store (name) VALUES (%s)"
         food_store_insert = ("INSERT INTO food_store"

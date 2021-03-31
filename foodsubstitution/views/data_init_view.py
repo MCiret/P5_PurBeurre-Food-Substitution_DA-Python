@@ -3,6 +3,11 @@ import config as cfg
 
 
 class DataInitView:
+    """
+    View called by DataInitControl for command-line arguments parsing,
+    displayings if user enters --verbose argument and potential error/problem
+    during data initialization.
+    """
 
     def __init__(self):
         self.page_arg_def_val = 1
@@ -45,7 +50,8 @@ class DataInitView:
     
     def data_loading_results(self, db_insertions_counters: dict):
         print(f"\n>>>>>>>>>> Data loading results <<<<<<<<<<\n"
-              f"Food products gotten from OFF search API = {db_insertions_counters['to_insert']}\n"
-              f"New Foods inserted in local db = {db_insertions_counters['prod']}\n"
-              f"New Categories inserted in local db = {db_insertions_counters['cat']}\n"
-              f"New Stores inserted in local db = {db_insertions_counters['store']}\n")
+              f"Step 1 : Food products gotten from OFF search API = {db_insertions_counters['to_insert']}\n"
+              f"Step 4 : New Foods inserted in local db = {db_insertions_counters['prod']}\n"
+              f"Step 4 : New Categories inserted in local db = {db_insertions_counters['cat']}\n"
+              f"Step 4 : New Stores inserted in local db = {db_insertions_counters['store']}\n"
+              f"\n🛈  Step 1 upper than 0 but one of Step 4 = 0 means that GET queries to OFF search API have found products which have been already inserted in the local database.\n")

@@ -4,7 +4,7 @@ GENERAL_MENU_VALID_INPUT_DICT = {
     "main": {"val": ('M', 'm'), "txt": "🖮  M ou m : menu principal"}
 }
 
-# Categories used in the GET queries to request Oopen Food Facts search API
+# Categories used in the GET queries to request Open Food Facts search API
 GET_QUERY_LIST_CATEGORIES_DICT = [
     {"0": "desserts", "1": "biscuits"},
     {"0": "desserts", "1": "fromages"},
@@ -17,18 +17,17 @@ GET_QUERY_LIST_CATEGORIES_DICT = [
 
 GET_QUERY_HEADER = {'user-agent': 'P5_DAPython - Linux - v0 - no_url'}
 
-NB_PROD_PER_PAGE = 50  # number of product per gotten page from OFF search API
+NB_PROD_PER_PAGE = 50  # number of product per page gotten from OFF search API
 
 # Fields filters used in the GET queries (request OFF data using API search)
-# for recovering only datas then used in the database
-# {json field: database field (table.field)}
+# for recovering only usefull data for the database
 QUERY_FIELDS_LIST = [
     "_id", "product_name", "quantity",
     "nutriscore_grade", "url",
     "stores_tags", "categories_tags", "compared_to_category"
 ]
 
-# Categories which are  kept for each product food retrieved from OFF search API.
+# Categories which are kept for each product food gotten from OFF search API.
 # And because they are often in english, it translates them to be used in this
 # french version (application and database values).
 CATEGORIES_TAGS_FR_TRANSLATION = {
@@ -67,11 +66,11 @@ PRETTY_PRINT_CATEGORY_DICT = {
     "pates-a-tartiner": "Pâtes à tartiner"
 }
 
-# Open Food Facts (OFF) data #
+# local database connection parameters #
 DB_PARAM = {
     'user': 'root',
     'password': 'boutaz',
     'host': '127.0.0.1',
-    'database': 'pur_beurre_db',
+    'database': 'pur_beurre_db',  # see database_managers/pur_beurre_db.sql file
      'raise_on_warnings': True  # warnings should raise exceptions
 }

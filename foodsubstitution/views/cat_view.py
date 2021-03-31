@@ -2,11 +2,12 @@ import config as cfg
 from foodsubstitution.views.main_menu_view import MainMenuView
 
 class CatView(MainMenuView):
+    """ View called by CatControl for terminal displayings """
 
     def __init__(self):
         super().__init__()
         self.general_menu += (cfg.GENERAL_MENU_VALID_INPUT_DICT["return"],)
-        self.set_general_menu_input()
+        self.set_general_menu_input()  # quit and go back to previous menu
 
     def display_specific_menu(self, categories:'list[Category]'):
         self.set_specific_valid_input(len(categories))

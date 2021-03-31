@@ -30,9 +30,7 @@ def get_off_api_data(page_nb: int) -> "list[dict]":
     return responses_json_list
 
 
-def check_off_data_gotten(off_api_json_responses:'list[dict[dict]]') -> 'list[dict]':
-    """A valid product has to be formed with 6 of the 8 requested fields
-    ("stores_tags" and "quantity_product" are optional)."""
+def check_off_data_gotten(off_api_json_responses: 'list[dict[dict]]') -> 'list[dict]':
 
     nb_query_resp_ok = 0
     for resp in off_api_json_responses:
@@ -41,10 +39,11 @@ def check_off_data_gotten(off_api_json_responses:'list[dict[dict]]') -> 'list[di
     return nb_query_resp_ok != 0 
 
 
-def build_list_of_all_valid_products(off_api_json_responses:
-                                     'list[dict[dict]]') -> 'list[dict]':
-    """A valid product has to be formed with 6 of the 8 requested fields
-    ("stores_tags" and "quantity_product" are optional)."""
+def build_list_of_all_valid_products(off_api_json_responses: 'list[dict[dict]]') -> 'list[dict]':
+    """
+    A valid product has to be formed with 6 of the 8 requested fields
+    ("stores_tags" and "quantity_product" are optional).
+    """
 
     return [prod for resp_dict in off_api_json_responses
             for prod in resp_dict["products"]
@@ -58,8 +57,10 @@ def build_list_of_all_valid_products(off_api_json_responses:
 
 
 def select_and_translate_products_categories(valid_products: 'list[dict]'):
-    """To have french categories names in database.
-    The list is modified by side effect."""
+    """
+    To have french categories names in database.
+    The list is modified by side effect.
+    """
     for prod in valid_products:
         tmp_categories_list = []
         for category in prod["categories_tags"]:

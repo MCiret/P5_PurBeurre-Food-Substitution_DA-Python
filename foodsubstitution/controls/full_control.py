@@ -9,7 +9,8 @@ from .read_bookmarks_control import ReadBookmarksControl
 import config as cfg
 
 class FullControl:
-
+    """ Manages all menus controllers"""
+    
     ATTRIBUTE_STR_TO_MENU_CONTROL_CLASS_DICT = {
         "main_menu_control": {"ct_class": "MainMenuControl", "next": ["cat_menu_control", "read_bookmarks_menu_control"]},
         "cat_menu_control": {"ct_class": "CatControl", "next": ["food_menu_control"], "prev": ["main_menu_control"]},
@@ -20,7 +21,7 @@ class FullControl:
     }
 
     def __init__(self):
-        # menus views controlers
+        # menus views controlers (instanced only if user asks)
         self.main_menu_control = MainMenuControl()
         self.cat_menu_control = None
         self.food_menu_control = None
@@ -34,6 +35,8 @@ class FullControl:
         self.substitution_foods: 'list[SubstitutionFood]' = None
 
     def full_run(self):
+        """The main function (called in main)"""
+        
         DataInitControl.run_data_initialization()
         self.call_menu_control("main_menu_control")
     

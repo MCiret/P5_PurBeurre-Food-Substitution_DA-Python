@@ -1,18 +1,29 @@
 import config as cfg
 
 class MainMenuView:
+    """ View called by MainMenuControl for terminal displayings """
 
     def __init__(self):
         self.general_menu = (cfg.GENERAL_MENU_VALID_INPUT_DICT["quit"],)
-        self.set_general_menu_input()
+        self.set_general_menu_input()  # only quit
     
     def set_general_menu_input(self):
+        """
+        General menu input are possible user choices to quit, go back to previous
+        menu or go back directly to main menu.
+        Available general menu choices depends on the MenuView.
+        """
         self.general_valid_input = ()
         for menu_dict in self.general_menu:
             if menu_dict["val"] not in self.general_valid_input:
                 self.general_valid_input += menu_dict["val"]
 
     def set_specific_valid_input(self, nb_items: int):
+        """
+        Specific menu input depends on which data list is displayed by each view.
+        It is set according to data selected from database by the corresponding controller.
+        Always called when the menu display his specific menu.
+        """
         if nb_items == 0:
             self.menu_valid_input = ()  # empty tuple
         else:

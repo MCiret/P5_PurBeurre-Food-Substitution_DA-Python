@@ -1,18 +1,18 @@
-"""Database layer access and handling of models instances
-(inserting, selecting, etc...)
-Look OC Webinaire (T. Chappuis) "BD - AOO - Orga du code"
-"""
-
 import foodsubstitution.models as m
 
 class CategoryManager:
+    """
+    Access to database to select/insert data from/in Category table.
+    Select queries creates Category objects.
+    """
 
     def __init__(self, db_connection, db_connector):
         self.db_connection = db_connection
         self.db_connector = db_connector
 
     def get_all(self) -> 'list[Category] (empty if nothing found)':
-        """To get and instance Category objects with all categories from DB.
+        """
+        To get and instance Category objects with all categories from DB.
         Joined Food not gotten (i.e attribute foods_category is None).
         """
         curs = self.db_connection.cursor()
@@ -27,8 +27,10 @@ class CategoryManager:
         return cat_list
 
     def get_all_by_food(self, food_id: int) -> 'list[Category] (empty if nothing found)':
-        """To get and instance Category objects for one Food.
-        Joined Food not gotten (i.e attribute foods_category is None)."""
+        """
+        To get and instance Category objects for one Food.
+        Joined Food not gotten (i.e attribute foods_category is None).
+        """
         curs = self.db_connection.cursor()
         cat_list = []
         curs.execute("SELECT * "
@@ -47,7 +49,7 @@ class CategoryManager:
         curs.close()
         return cat_list
 
-    def insert_categories_food(self, food_barcode: int, food_categories_list: list):
+    def insert_categories_food(self, food_barcode: int, food_categories_list: list) -> 'int (number of categories inserted)':
         curs = self.db_connection.cursor()
         category_insert = "INSERT INTO category (name) VALUES (%s)"
         food_cat_insert = ("INSERT INTO food_category"

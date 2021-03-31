@@ -1,20 +1,21 @@
-"""Database layer access and handling of models instances
-(inserting, selecting, etc...)
-Look OC Webinaire (T. Chappuis) "BD - AOO - Orga du code"
-"""
-
 import foodsubstitution.models as m
 
 class FoodManager:
+    """
+    Access to database to select/insert data from/in Food table.
+    Select queries creates Food (and subclass FoodSubstitution) objects.
+    """
 
     def __init__(self, db_connection, db_connector):
         self.db_connection = db_connection
         self.db_connector = db_connector
 
     def get_all_by_category(self, category_id: int) -> 'list[Food] (empty if nothing found)':
-        """To get and instance Food objects in one Category.
-        Joined Category and Store not gotten (i.e attributes categories_food and
-        stores_food are None)."""
+        """
+        Selects and instances Food objects for one Category. Joined Category and
+        Store are not gotten (i.e attributes categories_food and
+        stores_food are None).
+        """
         curs = self.db_connection.cursor()
         food_list = []
         curs.execute("SELECT * "
@@ -34,9 +35,11 @@ class FoodManager:
         return food_list
     
     def get_all_by_ctc_and_nutriscore_better_than(self, substituted_food: 'Food') -> 'list[SubstituteFood] (empty if nothing found)':
-        """ Get relevant substitutes list (i.e Foods with same compared_to_category
-        but better nutriscore than :param substituted_food). For each substitute Food, joined
-        Category and Store are gotten.""" 
+        """
+        Get relevant substitution foods list (i.e Foods with same compared_to_category
+        but better nutriscore than :param substituted_food). For each substitution Food, joined
+        Category and Store are gotten.
+        """ 
         curs = self.db_connection.cursor()
         subfood_list = []
         curs.execute("SELECT * FROM food as f "
@@ -56,7 +59,10 @@ class FoodManager:
         return subfood_list
 
     def get_all_by_compared_to_category(self, substituted_food_id: int, substituted_food_ctc: str) -> 'list[Food] (empty if nothing found)':
-        """ Get relevant comparable foods list (i.e with same compared_to_category).""" 
+        """
+        Get relevant comparable foods list (i.e Foods with same compared_to_category than :param substituted_food).
+        Called if no substitution food has been found.
+        """ 
         curs = self.db_connection.cursor()
         simfood_list = []
         curs.execute("SELECT * "
@@ -91,6 +97,8 @@ class FoodManager:
             return True
     
     def get_all_bookmarks_name_id_nutriscore(self) -> 'list[SubstitutionFood]':
+        """Get all bookmarked substitution foods."""
+
         curs = self.db_connection.cursor()
         bk_list = []
         curs.execute("SELECT fs.barcode, fs.name, fs.quantity, fs.nutriscore, fd.barcode, fd.name, fd.quantity, fd.nutriscore "
@@ -108,6 +116,10 @@ class FoodManager:
         return bk_list
     
     def get_one_bookmark_all_infos(self, substitution_food_id: int, substituted_food_id: int) -> 'SubstitutionFood':
+        """
+        Get all informations about one bookmarked substitution food
+        (called when user choose to display more info).
+        """
         curs = self.db_connection.cursor()
         curs.execute("SELECT * FROM food as fs "
                      "JOIN bookmark as bk ON (fs.barcode = bk.substitute_barcode) "
@@ -125,10 +137,11 @@ class FoodManager:
         curs.close()
         return subfood_obj
 
-    def insert_all_foods(self, json_products: list) -> dict:
-        """/!/ json_products has to be a list of valid products dicts (i.e
-        returned from off_json_data.make_list_of_all_valid_products() function).
-        1 product <=> 1 food
+    def insert_all_foods(self, json_products: list) -> 'dict (results of db insertions)':
+        """
+        Inserts foods products gotten from OFF search API.
+        :param json_products has to be a list of valid products dicts
+        (see foodsubstitution/controls/data_init_control.py --> run_data_initialization()).
         """
         prod_inserted = 0
         cat_inserted = 0
@@ -145,7 +158,7 @@ class FoodManager:
         return {"to_insert": len(json_products), "prod": prod_inserted,
                 "cat": cat_inserted, "store": store_inserted}
 
-    def insert_one_food(self, food_dict: dict):
+    def insert_one_food(self, food_dict: dict) -> 'init (1 if inserted, 0 if already in db)':
         curs = self.db_connection.cursor()
         food_insert = ("INSERT INTO food"
                 "(barcode, name, nutriscore, url_openfoodfacts,"
@@ -172,4 +185,3 @@ class FoodManager:
             curs.close()
             return 1
 
-    # Etc... => all needed and specific methods
