@@ -10,6 +10,8 @@ class BookmarkingView(SubstitutionView):
         self.set_general_menu_input()  # quit, go back to previous menu, go to main menu
 
     def display_specific_menu(self, substitution_foods: 'list[SubstitutionFood]'):
+        assert(type(substitution_foods) is list)
+        
         super().set_specific_valid_input(len(substitution_foods))
         print("\n\n💾 Saisir le numéro d'un substitut pour le sauvegarder et pouvoir le consulter ultérieurement (➔ Menu principal : 2- Retrouver mes aliments substitutés).\n")
         self.display_general_menu()

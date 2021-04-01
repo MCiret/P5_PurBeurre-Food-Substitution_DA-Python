@@ -39,21 +39,23 @@ class FoodView(CatView):
         self.display_food_category_or_store_in_array("Magasin(s)", food.stores_food)
                 
     def display_food_category_or_store_in_array(self, array_row_name: str, cat_or_store: 'list[Category or Store]'):
-            whole_str = ""
-            print(f"{'≀ ':<2}{array_row_name:^22}{' ≀':>2}", end="")
-            if len(cat_or_store) == 0:
-                print(f"{'Non Renseigné':^122}{' ≀':>2}")
-                print(f"{'~'*150}")
-            else:
-                for i, elem in enumerate(cat_or_store):
-                    if elem.name in cfg.PRETTY_PRINT_CATEGORY_DICT.keys():
-                        whole_str += cfg.PRETTY_PRINT_CATEGORY_DICT[elem.name].capitalize()
-                    else:
-                        whole_str += elem.name.capitalize()
-                    if i+1 < len(cat_or_store):
-                        whole_str += " ∙ "
-                print(f"{whole_str:^122}{' ≀':>2}")
-                print(f"{'~'*150}")
+        assert(type(array_row_name) is str and type(cat_or_store) is list)
+    
+        whole_str = ""
+        print(f"{'≀ ':<2}{array_row_name:^22}{' ≀':>2}", end="")
+        if len(cat_or_store) == 0:
+            print(f"{'Non Renseigné':^122}{' ≀':>2}")
+            print(f"{'~'*150}")
+        else:
+            for i, elem in enumerate(cat_or_store):
+                if elem.name in cfg.PRETTY_PRINT_CATEGORY_DICT.keys():
+                    whole_str += cfg.PRETTY_PRINT_CATEGORY_DICT[elem.name].capitalize()
+                else:
+                    whole_str += elem.name.capitalize()
+                if i+1 < len(cat_or_store):
+                    whole_str += " ∙ "
+            print(f"{whole_str:^122}{' ≀':>2}")
+            print(f"{'~'*150}")
 
     def no_data_found_error(self):
         print(f"\n\n⚠ Aucun aliment n'a été trouvé dans la catégorie "

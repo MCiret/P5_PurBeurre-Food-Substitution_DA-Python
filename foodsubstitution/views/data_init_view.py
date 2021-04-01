@@ -21,7 +21,9 @@ class DataInitView:
         args = parser.parse_args()
         return args
     
-    def data_initialization_step(self, code):
+    def data_initialization_step(self, code: int):
+        assert(type(code) is int)
+
         if code == 1:
             print(f"Step {code} : GET data from OFF search API page n°{self.page_arg_def_val}...", end="", flush=True)
         elif code == 2:
@@ -49,6 +51,8 @@ class DataInitView:
               "Exit...")
     
     def data_loading_results(self, db_insertions_counters: dict):
+        assert(type(db_insertions_counters) is dict)
+        
         print(f"\n>>>>>>>>>> Data loading results <<<<<<<<<<\n"
               f"Step 1 : Food products gotten from OFF search API = {db_insertions_counters['to_insert']}\n"
               f"Step 4 : New Foods inserted in local db = {db_insertions_counters['prod']}\n"

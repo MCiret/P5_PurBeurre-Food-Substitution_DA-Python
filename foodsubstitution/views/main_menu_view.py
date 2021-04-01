@@ -24,6 +24,8 @@ class MainMenuView:
         It is set according to data selected from database by the corresponding controller.
         Always called when the menu display his specific menu.
         """
+        assert(type(nb_items) is int)
+        
         if nb_items == 0:
             self.menu_valid_input = ()  # empty tuple
         else:

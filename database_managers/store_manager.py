@@ -15,6 +15,8 @@ class StoreManager:
         To get and instance Store objects for one Food.
         Joined Food not gotten (i.e attribute foods_store is None).
         """
+        assert(type(food_id) is int)
+        
         curs = self.db_connection.cursor()
         store_list = []
         curs.execute("SELECT * "
@@ -34,6 +36,8 @@ class StoreManager:
         return store_list
 
     def insert_stores_food(self, food_barcode: int, food_stores_list: list) -> 'int (number of stores inserted)':
+        assert(type(food_barcode) is int and type(food_stores_list) is list)
+
         curs = self.db_connection.cursor()
         store_insert = "INSERT INTO store (name) VALUES (%s)"
         food_store_insert = ("INSERT INTO food_store"

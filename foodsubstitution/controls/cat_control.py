@@ -13,7 +13,6 @@ class CatControl(MenuControl):
         Calls his view to display and get user choice in the categories existing
         in the queried database.
         """
-
         categories = full_control.categories
         # IF user choose 1- in the main menu for the 1st time SO all categories have to been gotten from db :
         if not categories:

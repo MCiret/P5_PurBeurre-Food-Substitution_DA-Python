@@ -10,6 +10,8 @@ class CatView(MainMenuView):
         self.set_general_menu_input()  # quit and go back to previous menu
 
     def display_specific_menu(self, categories:'list[Category]'):
+        assert(type(categories) is list)
+
         self.set_specific_valid_input(len(categories))
         print("\nDans quelle catégorie d'aliments souhaitez-vous rechercher un substitut ?\n")
         for i, cat in enumerate((cat.name for cat in categories)):

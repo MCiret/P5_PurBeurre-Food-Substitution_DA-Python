@@ -18,6 +18,8 @@ class SubstitutionView(FoodView):
               "∙ Similaire = uniquement même sous-catégorie de comparaison que l'aliment substitué (affiché(s) uniquement si aucun substitut n'a été trouvé).")
 
     def foods_similar_to_substituted_food(self, substituted_food:'Food', similar_foods:' list[Food]'):
+        assert(type(similar_foods) is list)
+
         """ Display when no substitution food has been found"""
         tot_nb_sim_food = len(similar_foods)
         txt1 = "⚠ Aucun substitut n'a été trouvé pour **"+f"{substituted_food.name}"+"**.\n"
@@ -34,6 +36,8 @@ class SubstitutionView(FoodView):
         print(f"{txt3:^150}")
 
     def substitution_winners(self, substitution_foods:'list[SubstitutionFood]'):
+        assert(type(substitution_foods) is list)
+        
         """ Display when at lest 1 substitution food has been found"""
         tot_nb_found_substitute = len(substitution_foods)
         print("")

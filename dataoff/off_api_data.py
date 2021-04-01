@@ -6,6 +6,8 @@ import requests
 def get_off_api_data(page_nb: int) -> "list[dict]":
 
     # Build the GET queries to retrieve json data from OFF search API
+    assert(type(page_nb) is int)
+
     get_queries_list = []
     for categories_dict in cfg.GET_QUERY_LIST_CATEGORIES_DICT:
         query_str = "https://fr.openfoodfacts.org/cgi/search.pl?action=process"
@@ -31,6 +33,7 @@ def get_off_api_data(page_nb: int) -> "list[dict]":
 
 
 def check_off_data_gotten(off_api_json_responses: 'list[dict[dict]]') -> 'list[dict]':
+    assert(type(off_api_json_responses) is list)
 
     nb_query_resp_ok = 0
     for resp in off_api_json_responses:
@@ -44,6 +47,7 @@ def build_list_of_all_valid_products(off_api_json_responses: 'list[dict[dict]]')
     A valid product has to be formed with 6 of the 8 requested fields
     ("stores_tags" and "quantity_product" are optional).
     """
+    assert(type(off_api_json_responses) is list)
 
     return [prod for resp_dict in off_api_json_responses
             for prod in resp_dict["products"]
@@ -61,6 +65,8 @@ def select_and_translate_products_categories(valid_products: 'list[dict]'):
     To have french categories names in database.
     The list is modified by side effect.
     """
+    assert(type(valid_products) is list)
+    
     for prod in valid_products:
         tmp_categories_list = []
         for category in prod["categories_tags"]:

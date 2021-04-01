@@ -40,7 +40,9 @@ class FullControl:
         DataInitControl.run_data_initialization()
         self.call_menu_control("main_menu_control")
     
-    def call_menu_control(self, menu_control_name: 'str', user_input=None):
+    def call_menu_control(self, menu_control_name: 'str', user_input: 'int or str'=None):
+        assert(type(menu_control_name) is str)
+        
         if not getattr(self, menu_control_name):
             setattr(self, menu_control_name, globals()[FullControl.ATTRIBUTE_STR_TO_MENU_CONTROL_CLASS_DICT[menu_control_name]["ct_class"]]())
         checked_user_input = getattr(self, menu_control_name).run_menu(self, user_input)

@@ -7,6 +7,8 @@ class ReadBookmarksView(BookmarkingView):
         super().__init__()    
 
     def display_specific_menu(self, bookmarks:'list[SubstitutionFood]'):
+        assert(type(bookmarks) is list)
+        
         nb_bookmarks = len(bookmarks)
         super().set_specific_valid_input(nb_bookmarks)
         print(f"\n{'~'*179}")

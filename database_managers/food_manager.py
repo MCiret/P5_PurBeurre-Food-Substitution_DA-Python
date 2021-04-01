@@ -16,6 +16,8 @@ class FoodManager:
         Store are not gotten (i.e attributes categories_food and
         stores_food are None).
         """
+        assert(type(category_id) is int)
+
         curs = self.db_connection.cursor()
         food_list = []
         curs.execute("SELECT * "
@@ -39,7 +41,9 @@ class FoodManager:
         Get relevant substitution foods list (i.e Foods with same compared_to_category
         but better nutriscore than :param substituted_food). For each substitution Food, joined
         Category and Store are gotten.
-        """ 
+        """
+        assert(type(substituted_food) is m.Food)
+
         curs = self.db_connection.cursor()
         subfood_list = []
         curs.execute("SELECT * FROM food as f "
@@ -62,7 +66,9 @@ class FoodManager:
         """
         Get relevant comparable foods list (i.e Foods with same compared_to_category than :param substituted_food).
         Called if no substitution food has been found.
-        """ 
+        """
+        assert(type(substituted_food_id) is int and type(substituted_food_ctc) is str)
+
         curs = self.db_connection.cursor()
         simfood_list = []
         curs.execute("SELECT * "
@@ -81,6 +87,8 @@ class FoodManager:
         return simfood_list
   
     def save_bookmark(self, substitution_food_id: int, substituted_food_id: int) -> 'bool (insertion success/failure)':
+        assert(type(substitution_food_id) is int and type(substituted_food_id) is int)
+
         curs = self.db_connection.cursor()
         try:
             curs.execute("INSERT INTO bookmark "
@@ -120,6 +128,8 @@ class FoodManager:
         Get all informations about one bookmarked substitution food
         (called when user choose to display more info).
         """
+        assert(type(substituted_food_id) is int and type(substitution_food_id) is int)
+
         curs = self.db_connection.cursor()
         curs.execute("SELECT * FROM food as fs "
                      "JOIN bookmark as bk ON (fs.barcode = bk.substitute_barcode) "
@@ -143,6 +153,8 @@ class FoodManager:
         :param json_products has to be a list of valid products dicts
         (see foodsubstitution/controls/data_init_control.py --> run_data_initialization()).
         """
+        assert(type(json_products) is list)
+
         prod_inserted = 0
         cat_inserted = 0
         store_inserted = 0
@@ -159,6 +171,8 @@ class FoodManager:
                 "cat": cat_inserted, "store": store_inserted}
 
     def insert_one_food(self, food_dict: dict) -> 'init (1 if inserted, 0 if already in db)':
+        assert(type(food_dict) is dict)
+        
         curs = self.db_connection.cursor()
         food_insert = ("INSERT INTO food"
                 "(barcode, name, nutriscore, url_openfoodfacts,"
