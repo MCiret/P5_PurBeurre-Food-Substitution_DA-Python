@@ -8,6 +8,9 @@ TABLE OF CONTENTS
 *****************
 
 1. `DESCRIPTION`_
+
+    * `Features`_
+
 2. `INSTALLATION`_
 
     * `Requirements`_
