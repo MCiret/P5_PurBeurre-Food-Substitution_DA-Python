@@ -69,7 +69,7 @@ PRETTY_PRINT_CATEGORY_DICT = {
 # local database connection parameters #
 DB_PARAM = {
     'user': 'root',
-    'password': '******',
+    'password': 'boutaz',
     'host': '127.0.0.1',
     'database': 'pur_beurre_db',  # see database_managers/pur_beurre_db.sql file
      'raise_on_warnings': True  # warnings should raise exceptions

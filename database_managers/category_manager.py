@@ -51,8 +51,9 @@ class CategoryManager:
         curs.close()
         return cat_list
 
-    def insert_categories_food(self, food_barcode: int, food_categories_list: list) -> 'int (number of categories inserted)':
-        assert(type(food_barcode) is int and type(food_categories_list) is list)
+    def insert_categories_food(self, food_barcode: str, food_categories_list: list) -> 'int (number of categories inserted)':
+        assert(type(food_barcode) is str)
+        assert(type(food_categories_list) is list)
         
         curs = self.db_connection.cursor()
         category_insert = "INSERT INTO category (name) VALUES (%s)"

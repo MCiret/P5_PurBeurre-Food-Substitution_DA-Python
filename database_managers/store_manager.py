@@ -35,8 +35,8 @@ class StoreManager:
         curs.close()
         return store_list
 
-    def insert_stores_food(self, food_barcode: int, food_stores_list: list) -> 'int (number of stores inserted)':
-        assert(type(food_barcode) is int and type(food_stores_list) is list)
+    def insert_stores_food(self, food_barcode: str, food_stores_list: list) -> 'int (number of stores inserted)':
+        assert(type(food_barcode) is str and type(food_stores_list) is list)
 
         curs = self.db_connection.cursor()
         store_insert = "INSERT INTO store (name) VALUES (%s)"
