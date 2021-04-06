@@ -35,13 +35,11 @@ class SubstitutionControl(MenuControl):
             substitution_foods = full_control.substitution_foods
         
         if len(substitution_foods) > 0:
-            print("compared_to_category", substituted_food.compared_to_category)
             self.view.display_specific_menu(substituted_food)
             self.view.substitution_winners(substitution_foods)
             return 0
         else:
             similar_foods = Food.objects.get_all_by_compared_to_category(substituted_food.id, substituted_food.compared_to_category)
-            print("compared_to_category", substituted_food.compared_to_category)
             self.view.display_specific_menu(substituted_food)
             self.view.foods_similar_to_substituted_food(substituted_food, similar_foods)
             self.view.display_general_menu()
