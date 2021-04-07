@@ -2,13 +2,14 @@ from foodsubstitution.views.cat_view import CatView
 from foodsubstitution.models.category_model import Category
 from .menu_control import MenuControl
 
+
 class CatControl(MenuControl):
     """ Controller for menu called if user choose '1' in 1st menu (MainMenuControl) """
-    
+
     def __init__(self):
         super().__init__(CatView())
-    
-    def run_menu(self, full_control: 'FullControl', user_input: int=None) -> 'int or str':
+
+    def run_menu(self, full_control: 'FullControl', user_input: int = None) -> 'int or str':
         """
         Calls his view to display and get user choice in the categories existing
         in the queried database.

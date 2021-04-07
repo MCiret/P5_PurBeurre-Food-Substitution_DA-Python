@@ -1,5 +1,6 @@
 import foodsubstitution.models as m
 
+
 class CategoryManager:
     """
     Access to database to select/insert data from/in Category table.
@@ -18,7 +19,7 @@ class CategoryManager:
         curs = self.db_connection.cursor()
         cat_list = []
         curs.execute("SELECT * FROM category")
-        for cat_res in curs.fetchall():  # fetchall() returns [] if query result set is empty ; fetchnone() returns None in the same case
+        for cat_res in curs.fetchall():  # fetchall() returns [] if query result is empty ; fetchnone() returns None
             cat_obj = m.Category(cat_res[1])
             cat_obj.id = cat_res[0]
             cat_list.append(cat_obj)
@@ -26,7 +27,7 @@ class CategoryManager:
         curs.close()
         return cat_list
 
-    def get_all_by_food(self, food_id: int) -> 'list[Category] (empty if nothing found)':
+    def get_all_by_food(self, food_id: int) -> 'list[Category]':
         """
         To get and instance Category objects for one Food.
         Joined Food not gotten (i.e attribute foods_category is None).
@@ -51,10 +52,10 @@ class CategoryManager:
         curs.close()
         return cat_list
 
-    def insert_categories_food(self, food_barcode: str, food_categories_list: list) -> 'int (number of categories inserted)':
+    def insert_categories_food(self, food_barcode: str, food_categories_list: list) -> int:
         assert(type(food_barcode) is str)
         assert(type(food_categories_list) is list)
-        
+
         curs = self.db_connection.cursor()
         category_insert = "INSERT INTO category (name) VALUES (%s)"
         food_cat_insert = ("INSERT INTO food_category"
@@ -70,7 +71,7 @@ class CategoryManager:
                 self.db_connection.commit()
                 cat_insertion += 1
             finally:
-                curs.execute(f"SELECT id FROM category WHERE name = %s", (cat,))
+                curs.execute("SELECT id FROM category WHERE name = %s", (cat,))
                 cat_id = curs.fetchone()[0]
                 try:
                     curs.execute(food_cat_insert, (food_barcode, cat_id))

@@ -2,6 +2,7 @@ from database_managers.category_manager import CategoryManager
 from database_managers.db_connection import db_connection_activate, db_connector
 from dataclasses import dataclass, field
 
+
 @dataclass
 class Category:
     """Category objects initialized in database SELECT queries"""

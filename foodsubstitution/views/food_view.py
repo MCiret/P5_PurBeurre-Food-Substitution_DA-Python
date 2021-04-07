@@ -1,6 +1,7 @@
 import config as cfg
 from foodsubstitution.views.cat_view import CatView
 
+
 class FoodView(CatView):
     """ View called by FoodControl for terminal displayings """
 
@@ -10,8 +11,9 @@ class FoodView(CatView):
     def display_specific_menu(self, selected_category: 'Category'):
         self.selected_category_name: str = selected_category.name
         super().set_specific_valid_input(len(selected_category.foods_category))
-        print(f"\n⮱ Pour quel(le) {cfg.PRETTY_PRINT_CATEGORY_DICT[self.selected_category_name].capitalize()} souhaitez-vous rechercher un substitut ?\n"
-               "   * aliment dont le nutriscore est déjà au maximum (A).\n")
+        print(f"\n⮱ Pour quel(le) {cfg.PRETTY_PRINT_CATEGORY_DICT[self.selected_category_name].capitalize()} "
+              f"souhaitez-vous rechercher un substitut ?\n"
+              f"   * aliment dont le nutriscore est déjà au maximum (A).\n")
         for i, food in enumerate(selected_category.foods_category):
             if food.nutriscore == 'a':
                 food_name_txt = "*" + food.name
@@ -24,8 +26,8 @@ class FoodView(CatView):
                 print("")
         print("\n* aliment dont le nutriscore est déjà au maximum (A).\n")
         super().display_general_menu()
-    
-    def display_one_food_in_array(self, food:'Food'):
+
+    def display_one_food_in_array(self, food: 'Food'):
         print(f"{'~'*150}")
         print(f"{'≀ ':<2}{food.name+' ('+food.quantity+')':^146}{' ≀':>2}")
         print(f"{'~'*150}")
@@ -37,10 +39,10 @@ class FoodView(CatView):
         print(f"{'~'*150}")
         self.display_food_category_or_store_in_array("Catégorie(s)", food.categories_food)
         self.display_food_category_or_store_in_array("Magasin(s)", food.stores_food)
-                
+
     def display_food_category_or_store_in_array(self, array_row_name: str, cat_or_store: 'list[Category or Store]'):
         assert(type(array_row_name) is str and type(cat_or_store) is list)
-    
+
         whole_str = ""
         print(f"{'≀ ':<2}{array_row_name:^22}{' ≀':>2}", end="")
         if len(cat_or_store) == 0:
@@ -59,6 +61,6 @@ class FoodView(CatView):
 
     def no_data_found_error(self):
         print(f"\n\n⚠ Aucun aliment n'a été trouvé dans la catégorie "
-              f"{cfg.PRETTY_PRINT_CATEGORY_DICT[self.selected_category_name].capitalize()}.\n" 
+              f"{cfg.PRETTY_PRINT_CATEGORY_DICT[self.selected_category_name].capitalize()}.\n"
               f"Consultez l'aide (README.rst ou --help) pour alimenter votre base de données locale\n."
               f"Retour au menu précédent...\n")

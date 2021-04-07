@@ -1,14 +1,15 @@
 from foodsubstitution.views.bookmarking_view import BookmarkingView
 
+
 class ReadBookmarksView(BookmarkingView):
     """ View called by ReadBookmarksControl for terminal displayings """
 
     def __init__(self):
-        super().__init__()    
+        super().__init__()
 
-    def display_specific_menu(self, bookmarks:'list[SubstitutionFood]'):
+    def display_specific_menu(self, bookmarks: 'list[SubstitutionFood]'):
         assert(type(bookmarks) is list)
-        
+
         nb_bookmarks = len(bookmarks)
         super().set_specific_valid_input(nb_bookmarks)
         print(f"\n{'~'*179}")
@@ -27,10 +28,12 @@ class ReadBookmarksView(BookmarkingView):
             print(f"{'~'*179}")
 
         print(f"\n💾 Vous avez {nb_bookmarks} aliments substitués sauvegardés.\n"
-               "    🛈 Un aliment est substitué par un aliment substitut (c'est à dire ayant un meilleur Nutri-Score).")
+              f"    🛈 Un aliment est substitué par un aliment substitut "
+              f"(c'est à dire ayant un meilleur Nutri-Score).")
 
         if nb_bookmarks > 0:
             print("\n⮱ Saisir le numéro pour afficher plus d'informations.\n")
         else:
-            print("\n⮱ Pour sauvegarder des aliments substitués, il vous faut effectuer une recherche de substituts (➔ Menu principal : 1- Quel aliment souhaitez-vous remplacer ?).\n")
+            print("\n⮱ Pour sauvegarder des aliments substitués, il vous faut effectuer une recherche de substituts "
+                  "(➔ Menu principal : 1- Quel aliment souhaitez-vous remplacer ?).\n")
         self.display_general_menu()

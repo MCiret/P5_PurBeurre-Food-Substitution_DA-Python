@@ -1,6 +1,7 @@
 from .food_model import Food
 from dataclasses import dataclass, field
 
+
 @dataclass
 class SubstitutionFood(Food):
     """

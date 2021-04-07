@@ -8,19 +8,17 @@ TABLE OF CONTENTS
 *****************
 
 1. `DESCRIPTION`_
-
     * `Features`_
 
 2. `INSTALLATION`_
-
+    * `Database installation`_
+    * `Application`_
     * `Requirements`_
 
 3. `USAGE`_
-
     * `json data examples`_
     * `Database`_
-    * `OFF Search API query`_
-
+    * `OFF Search API query`_  
         1) Default usage
         2) Personalized usage
 
@@ -67,16 +65,56 @@ repeating the research (Main menu choice 2-).
 
 INSTALLATION
 ============
-1) Install MySQL SGDB and then dodify DB_PARAM dict (in config.py) to replace it with your database connection parameters.
+
+Database installation
+---------------------
+
+1) Install MySQL SGDB and then modify DB_PARAM dict (in config.py) to replace it with your database connection parameters.
 2) Create the database by executing database_managers/pur_beurre_db_creation.sql (see Physical Data Model local_db_PDM_).
-3) Run the code source main.py file : (UNIX) python -m main (DOS) py main.py
-4) Usage: [-h|--help] [-ld|--load_data] [-p|--page PAGE] [-v|--verbose]
+
+Application
+-----------
+
+1) Download the project : use the "Code" (green button) and unzip the P5_PurBeurre-Food-Substitution_DA-Python-master/
+2) Python3 comes with Python Package Manager (pip) else you have to install it (https://pip.pypa.io/en/stable/installing/)
+
+3) Set up a virtual environment :
+
+    NB: the symbol $ flags the commands prompt
+
+    * UNIX operating system :
+        3.1) Install the Python module : $ pip install venv
+
+        3.2) Navigate to the project main directory using command prompt : $ cd .....
+        
+        3.3) Create a virtual environment : $ python -m venv name_of_your_virtual_env
+        
+        3.4) Activate the virtual environment : $ source name_of_your_virtual_env/bin/activate
+        
+    * DOS operating system :
+        
+        3.1) Install the Python module : $ pip install venv
+        
+        3.2) Navigate to the project main directory using command prompt : $ cd .....
+        
+        3.3) Create a virtual environment : $ py -m venv name_of_your_virtual_env
+        
+        3.4) Activate the virtual environment : $ .\name_of_your_virtual_env\Scripts\activate
+        
+
+4) Install required libraries :
+    * using the provided text file : $ pip install -r requirements.txt
+    * OR install manually each Python package (see Requirements section below)
+  
+5) Run the code source main.py file : (UNIX) python ./main.py (DOS) py main.py
+
+    ↳ Usage: [-h|--help] [-ld|--load_data] [-p|--page PAGE] [-v|--verbose]
 
 Requirements
 ------------
 |vPython badge| |vMySQL badge|
 
-Python librairies (see requirements.txt):
+Python libraries (see requirements.txt):
 
 * certifi==2020.12.5
 * chardet==4.0.0

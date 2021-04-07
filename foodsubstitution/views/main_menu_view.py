@@ -1,12 +1,13 @@
 import config as cfg
 
+
 class MainMenuView:
     """ View called by MainMenuControl for terminal displayings """
 
     def __init__(self):
         self.general_menu = (cfg.GENERAL_MENU_VALID_INPUT_DICT["quit"],)
         self.set_general_menu_input()  # only quit
-    
+
     def set_general_menu_input(self):
         """
         General menu input are possible user choices to quit, go back to previous
@@ -25,7 +26,7 @@ class MainMenuView:
         Always called when the menu display his specific menu.
         """
         assert(type(nb_items) is int)
-        
+
         if nb_items == 0:
             self.menu_valid_input = ()  # empty tuple
         else:
@@ -43,14 +44,13 @@ class MainMenuView:
         print("1 - Quel aliment souhaitez-vous remplacer ?\n"
               "2 - Retrouver mes aliments substitués.\n")
         self.display_general_menu()
- 
+
     def get_user_choice(self) -> str:
         user_choice = input("\nVeuillez saisir votre choix : ")
         if user_choice.isdigit():
             return int(user_choice)
         else:
             return user_choice
-    
+
     def quit_msg(self):
         print("Exit...")
-    

@@ -72,5 +72,5 @@ DB_PARAM = {
     'password': 'boutaz',
     'host': '127.0.0.1',
     'database': 'pur_beurre_db',  # see database_managers/pur_beurre_db.sql file
-     'raise_on_warnings': True  # warnings should raise exceptions
+    'raise_on_warnings': True  # warnings should raise exceptions
 }
