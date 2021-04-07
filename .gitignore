@@ -4,3 +4,5 @@ __pycache__/
 dataoff/Written json data/
 dataoff/myUtils_tmp.py
 .vscode/
+flake8.txt
+
